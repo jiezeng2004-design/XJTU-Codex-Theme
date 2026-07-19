@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440" role="img" aria-labelledby="title desc">
+  <title id="title">XJTU Codex dark campus concept</title>
+  <desc id="desc">Original nocturnal academic campus with historic arch, research buildings, mountains, and westbound trajectory on the right.</desc>
+  <defs>
+    <linearGradient id="night" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#09131e"/>
+      <stop offset="0.52" stop-color="#10283d"/>
+      <stop offset="1" stop-color="#18384b"/>
+    </linearGradient>
+    <linearGradient id="horizon" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#31576b" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#7f9aa2" stop-opacity="0.26"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#32566a"/>
+      <stop offset="1" stop-color="#132b3d"/>
+    </linearGradient>
+    <linearGradient id="stone" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#49636e"/>
+      <stop offset="1" stop-color="#243d4b"/>
+    </linearGradient>
+    <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse">
+      <path d="M44 0H0v44" fill="none" stroke="#9fc2cb" stroke-opacity="0.025"/>
+    </pattern>
+    <pattern id="windows" width="54" height="44" patternUnits="userSpaceOnUse">
+      <rect x="9" y="9" width="27" height="14" rx="2" fill="#d1b476" fill-opacity="0.28"/>
+      <path d="M0 36h54" stroke="#8fb5c4" stroke-opacity="0.1"/>
+    </pattern>
+    <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <rect width="2560" height="1440" fill="url(#night)"/>
+  <rect width="2560" height="1440" fill="url(#grid)"/>
+
+  <g fill="none" stroke="#b5d2d8" stroke-opacity="0.045" stroke-width="2">
+    <path d="M-120 240C220 130 455 175 730 330s470 145 780-55"/>
+    <path d="M-130 295C230 180 475 230 720 375s455 140 785-45"/>
+    <path d="M-140 350C245 235 495 285 715 420s440 132 790-38"/>
+    <path d="M110 650h690M190 686h540M285 722h370"/>
+  </g>
+
+  <path d="M0 980L190 930l180 48 210-122 220 106 235-150 225 118 210-94 210 130 190-75 220 105 320-104v548H0Z" fill="#274b5b" fill-opacity="0.65"/>
+  <path d="M0 1060L200 1020l170 28 225-90 196 80 245-116 205 90 218-72 215 104 205-56 228 88 293-65v429H0Z" fill="#152f42" fill-opacity="0.92"/>
+
+  <g transform="translate(0 920)" fill="#79929b" fill-opacity="0.08">
+    <path d="M0 150h80v-45h28V72h54v33h28v45h88v-57h24V45h70v48h24v57h94v-42h24V76h58v32h24v42h96v-62h26V38h76v50h26v62h110V520H0Z"/>
+  </g>
+
+  <path d="M0 1195C510 1162 850 1198 1195 1252s710 24 1365-144v332H0Z" fill="url(#horizon)"/>
+  <path d="M55 1310C610 1272 900 1268 1245 1300s695-4 1235-190" fill="none" stroke="#d1b476" stroke-opacity="0.72" stroke-width="5"/>
+  <path d="M55 1328C620 1290 910 1290 1250 1318s700-8 1236-194" fill="none" stroke="#a44b51" stroke-opacity="0.72" stroke-width="3"/>
+  <path d="M1230 1299c420 38 825-30 1240-185" fill="none" stroke="#d1b476" stroke-opacity="0.13" stroke-width="28" filter="url(#glow)"/>
+
+  <g transform="translate(1510 390)">
+    <path d="M285 635V145h142V58h315v87h165v490Z" fill="url(#glass)" stroke="#7396a3" stroke-opacity="0.3" stroke-width="5"/>
+    <path d="M285 635V145h142V58h315v87h165v490Z" fill="url(#windows)"/>
+    <path d="M427 58V8h315v50M505 8v50M584 8v50M663 8v50" fill="none" stroke="#91b4bf" stroke-opacity="0.38" stroke-width="7"/>
+    <path d="M306 175h580M306 262h580M306 349h580M306 436h580M306 523h580" stroke="#91b4bf" stroke-opacity="0.12" stroke-width="4"/>
+    <path d="M250 635h735" stroke="#d1b476" stroke-opacity="0.25" stroke-width="8"/>
+  </g>
+
+  <g transform="translate(1695 570)">
+    <rect x="-120" y="392" width="840" height="46" rx="5" fill="#172e3d"/>
+    <path d="M0 392V122h78V64h400v58h80v270Z" fill="url(#stone)" stroke="#91aeb6" stroke-opacity="0.4" stroke-width="5"/>
+    <path d="M-34 130L44 68h450l96 62Z" fill="#405b66" stroke="#91aeb6" stroke-opacity="0.36" stroke-width="5"/>
+    <path d="M85 392V198c0-88 67-140 116-140h80c50 0 117 52 117 140v194Z" fill="#173447" stroke="#9cb9c0" stroke-opacity="0.5" stroke-width="8"/>
+    <path d="M131 392V218c0-62 42-105 89-105h43c47 0 89 43 89 105v174Z" fill="#0a1e2d"/>
+    <path d="M18 166h50v226H18ZM490 166h50v226h-50Z" fill="#3d5660" stroke="#91aeb6" stroke-opacity="0.3" stroke-width="4"/>
+    <path d="M-10 195h100M468 195h100M0 255h82M478 255h82" stroke="#a44b51" stroke-opacity="0.8" stroke-width="7"/>
+    <path d="M-20 342h120M458 342h120" stroke="#d1b476" stroke-opacity="0.72" stroke-width="8"/>
+    <path d="M164 388h154" stroke="#d1b476" stroke-opacity="0.35" stroke-width="12" filter="url(#glow)"/>
+  </g>
+
+  <g transform="translate(1380 625)">
+    <path d="M170 350L242 0l72 350Z" fill="#334e5b" stroke="#8db0bb" stroke-opacity="0.48" stroke-width="5"/>
+    <path d="M219 150h48M207 213h73M193 280h100" stroke="#a44b51" stroke-opacity="0.85" stroke-width="7"/>
+    <rect x="146" y="350" width="190" height="35" rx="4" fill="#1d3848"/>
+    <path d="M242 25v270" stroke="#d1b476" stroke-opacity="0.24" stroke-width="5"/>
+  </g>
+
+  <g fill="none" stroke="#8eb0ba" stroke-opacity="0.28" stroke-width="5">
+    <path d="M2240 1230c-112-178-148-344-106-495"/>
+    <path d="M2274 1220c-62-201-56-364 19-496"/>
+    <path d="M2124 772c69-8 116 22 130 100M2298 710c69-37 124-21 154 30"/>
+    <path d="M2156 918c70-8 119 23 134 103M2260 872c73-30 126-9 152 42"/>
+  </g>
+  <g fill="#496b77" stroke="#9eb9bf" stroke-opacity="0.2" stroke-width="3">
+    <path d="M2122 774c-87-4-127-46-132-105 69-7 118 23 132 105Z"/>
+    <path d="M2292 714c73-35 128-18 157 33-56 43-112 32-157-33Z"/>
+    <path d="M2160 920c-89-3-130-46-136-104 70-8 120 23 136 104Z"/>
+    <path d="M2254 876c77-28 129-5 152 49-61 37-115 20-152-49Z"/>
+  </g>
+
+  <g transform="translate(2315 365)" fill="none" stroke="#d1b476" stroke-opacity="0.34" stroke-width="5">
+    <circle r="92"/>
+    <circle r="59"/>
+    <path d="M0-120v37M0 83v37M-120 0h37M83 0h37M-85-85l26 26M59 59l26 26M85-85L59-59M-59 59l-26 26"/>
+  </g>
+
+  <g fill="#d1b476">
+    <circle cx="1556" cy="1118" r="3" opacity="0.65"/>
+    <circle cx="1880" cy="1088" r="3" opacity="0.55"/>
+    <circle cx="2112" cy="1050" r="3" opacity="0.45"/>
+  </g>
+</svg>

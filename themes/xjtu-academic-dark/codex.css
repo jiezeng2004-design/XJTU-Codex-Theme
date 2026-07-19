@@ -1,0 +1,161 @@
+/* XJTU Academic Dark — selectors must be refreshed from a live Codex DOM snapshot before release. */
+:root.codedrobe-host-codex {
+  color-scheme: dark !important;
+  --xjtu-bg: #071429;
+  --xjtu-surface: rgba(10, 26, 49, .62);
+  --xjtu-surface-strong: rgba(12, 31, 57, .84);
+  --xjtu-sidebar: rgba(7, 21, 42, .78);
+  --xjtu-text: #e7edf5;
+  --xjtu-muted: #a5b2c3;
+  --xjtu-accent: #d2a15b;
+  --xjtu-accent-soft: rgba(210, 161, 91, .14);
+  --xjtu-blue: #6f9ac8;
+  --xjtu-border: rgba(167, 190, 216, .19);
+  --xjtu-shadow: rgba(0, 7, 18, .42);
+
+  --color-token-bg-primary: rgba(7, 20, 41, .38) !important;
+  --color-token-bg-secondary: var(--xjtu-surface) !important;
+  --color-token-main-surface-primary: var(--xjtu-surface) !important;
+  --color-token-side-bar-background: var(--xjtu-sidebar) !important;
+  --color-token-foreground: var(--xjtu-text) !important;
+  --color-token-text-primary: var(--xjtu-text) !important;
+  --color-token-text-secondary: var(--xjtu-muted) !important;
+  --color-token-border: var(--xjtu-border) !important;
+  --color-token-input-background: var(--xjtu-surface-strong) !important;
+  --color-token-input-border: var(--xjtu-border) !important;
+  --color-token-list-hover-background: var(--xjtu-accent-soft) !important;
+  --color-token-list-active-selection-background: rgba(210, 161, 91, .22) !important;
+  --color-token-link: #9fc4ec !important;
+  --color-token-primary: var(--xjtu-accent) !important;
+  --color-token-focus-border: rgba(210, 161, 91, .72) !important;
+}
+
+html.codedrobe-host-codex body {
+  background-color: var(--xjtu-bg) !important;
+  background-image:
+    linear-gradient(90deg, rgba(5, 15, 33, .66) 0 42%, rgba(5, 15, 33, .34) 62%, rgba(5, 15, 33, .12) 100%),
+    var(--codedrobe-image-hero, linear-gradient(135deg, #071429, #163661)) !important;
+  background-position: center, center !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  background-attachment: fixed !important;
+  color: var(--xjtu-text) !important;
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel {
+  background: var(--xjtu-sidebar) !important;
+  border-right: 1px solid var(--xjtu-border) !important;
+  box-shadow: 10px 0 32px rgba(0, 7, 18, .34) !important;
+  color: var(--xjtu-text) !important;
+  backdrop-filter: blur(22px) saturate(1.10);
+  -webkit-backdrop-filter: blur(22px) saturate(1.10);
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel :is(a, button) {
+  border-radius: 11px !important;
+  color: var(--xjtu-text) !important;
+  transition: background-color .16s ease, transform .16s ease !important;
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel :is(a, button):hover {
+  background: var(--xjtu-accent-soft) !important;
+  transform: translateX(2px);
+}
+
+html.codedrobe-host-codex aside.app-shell-left-panel :is([aria-current="page"], [aria-selected="true"]) {
+  background: rgba(210, 161, 91, .19) !important;
+  box-shadow: inset 0 0 0 1px rgba(210, 161, 91, .20) !important;
+}
+
+html.codedrobe-host-codex main.main-surface {
+  position: relative;
+  background: rgba(8, 23, 45, .48) !important;
+  border: 1px solid var(--xjtu-border) !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  border-radius: 22px 0 0 !important;
+  box-shadow: -10px 0 36px rgba(0, 7, 18, .30) !important;
+  backdrop-filter: blur(18px) saturate(1.08);
+  -webkit-backdrop-filter: blur(18px) saturate(1.08);
+}
+
+html.codedrobe-host-codex main.main-surface > header,
+html.codedrobe-host-codex header.app-header-tint {
+  background: rgba(10, 27, 51, .68) !important;
+  border-bottom: 1px solid var(--xjtu-border) !important;
+  color: var(--xjtu-text) !important;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+html.codedrobe-host-codex [role="main"] {
+  background: transparent !important;
+  color: var(--xjtu-text) !important;
+}
+
+html.codedrobe-host-codex .group\/home-suggestions > * {
+  border: 1px solid var(--xjtu-border) !important;
+  border-radius: 16px !important;
+  background: rgba(11, 29, 54, .72) !important;
+  box-shadow: 0 10px 26px rgba(0, 7, 18, .28) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+html.codedrobe-host-codex .composer-surface-chrome {
+  border: 1px solid rgba(167, 190, 216, .24) !important;
+  border-radius: 20px !important;
+  background: var(--xjtu-surface-strong) !important;
+  color: var(--xjtu-text) !important;
+  box-shadow: 0 14px 36px var(--xjtu-shadow) !important;
+  backdrop-filter: blur(20px) saturate(1.10);
+  -webkit-backdrop-filter: blur(20px) saturate(1.10);
+}
+
+html.codedrobe-host-codex .composer-surface-chrome :is(textarea, .ProseMirror, [contenteditable="true"]) {
+  color: var(--xjtu-text) !important;
+  caret-color: var(--xjtu-accent) !important;
+}
+
+html.codedrobe-host-codex :is(article, [data-message-author-role]) {
+  color: var(--xjtu-text) !important;
+}
+
+html.codedrobe-host-codex :is(pre, table, blockquote) {
+  border: 1px solid var(--xjtu-border) !important;
+  border-radius: 12px !important;
+  background: rgba(5, 17, 35, .78) !important;
+}
+
+html.codedrobe-host-codex :is(button, [role="button"]):focus-visible,
+html.codedrobe-host-codex :is(a, input, textarea, [contenteditable="true"]):focus-visible {
+  outline: 2px solid rgba(210, 161, 91, .76) !important;
+  outline-offset: 2px !important;
+}
+
+html.codedrobe-host-codex :is(a, button, input, textarea, [contenteditable="true"]) {
+  accent-color: var(--xjtu-accent);
+}
+
+html.codedrobe-host-codex * {
+  scrollbar-color: rgba(159, 196, 236, .32) transparent;
+}
+
+@media (max-width: 820px) {
+  html.codedrobe-host-codex body {
+    background-image:
+      linear-gradient(rgba(5, 15, 33, .72), rgba(5, 15, 33, .84)),
+      var(--codedrobe-image-hero, none) !important;
+    background-position: center, 70% center !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.codedrobe-host-codex *,
+  html.codedrobe-host-codex *::before,
+  html.codedrobe-host-codex *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

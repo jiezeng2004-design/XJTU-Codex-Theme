@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "xjtu-academic-dark",
+  "displayName": "XJTU Academic Dark",
+  "version": "0.1.0",
+  "images": {
+    "hero": "assets/hero.jpg"
+  },
+  "copy": {
+    "tagline": "Qinling blue hour, focused research"
+  },
+  "targets": {
+    "codex": {
+      "css": "codex.css",
+      "options": {
+        "rendererProfile": "codex-theme-v1",
+        "baseTheme": {
+          "mode": "dark",
+          "accent": "#D2A15B",
+          "ink": "#E7EDF5",
+          "surface": "#0A1930"
+        }
+      },
+      "verification": {
+        "contexts": [
+          {
+            "name": "home",
+            "when": {
+              "any": [
+                "[role='main']:has([data-testid='home-icon'])"
+              ]
+            },
+            "recommended": [
+              {
+                "name": "home-suggestions",
+                "any": [
+                  ".group\\/home-suggestions"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

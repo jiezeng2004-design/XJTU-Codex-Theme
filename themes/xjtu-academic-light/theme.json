@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "xjtu-academic-light",
+  "displayName": "XJTU Academic Light",
+  "version": "0.1.0",
+  "images": {
+    "hero": "assets/hero.jpg"
+  },
+  "copy": {
+    "tagline": "Chang'an heritage, clear-minded research"
+  },
+  "targets": {
+    "codex": {
+      "css": "codex.css",
+      "options": {
+        "rendererProfile": "codex-theme-v1",
+        "baseTheme": {
+          "mode": "light",
+          "accent": "#9B4A3C",
+          "ink": "#263746",
+          "surface": "#F6F0E6"
+        }
+      },
+      "verification": {
+        "contexts": [
+          {
+            "name": "home",
+            "when": {
+              "any": [
+                "[role='main']:has([data-testid='home-icon'])"
+              ]
+            },
+            "recommended": [
+              {
+                "name": "home-suggestions",
+                "any": [
+                  ".group\\/home-suggestions"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
