@@ -1,6 +1,6 @@
-# XJTU Codex Theme - Trial Ready
+# XJTU Codex Theme - Safety Trial Ready
 
-Status: ready for scripted local trial on 2026-07-20.
+Status: ready for a guarded local trial on 2026-07-20.
 
 ## Preserved deliverables
 
@@ -13,9 +13,25 @@ Status: ready for scripted local trial on 2026-07-20.
 
 The source themes use package-optimized JPEG hero assets. The approved PNG originals remain in `assets/backgrounds/`.
 
+## Safety model
+
+The trial uses an isolated Chromium profile under `%LOCALAPPDATA%\CodeDrobe\profiles\xjtu-codex-theme`. The existing `%APPDATA%\Codex` browser profile is not copied, edited, or used by the themed instance.
+
+Before any process is closed, the launcher:
+
+1. resolves and validates the Store Codex executable and selected theme package;
+2. refuses to continue when CodeDrobe has an unresolved transactional backup;
+3. creates a private snapshot of `~/.codex/config.toml` under `%LOCALAPPDATA%\CodeDrobe\backups\xjtu-codex-theme`;
+4. verifies the snapshot with SHA-256 and records an active restore pointer;
+5. acquires an exclusive lock so launch and restore cannot run concurrently.
+
+CodeDrobe also creates its own transactional backup. If inspect, launch, probe, apply, or verify fails, the launcher attempts CodeDrobe restore, restores the independently verified config snapshot, closes the isolated instance, and starts normal Codex without a custom profile.
+
+This protects the files and settings touched by the workflow. It cannot guarantee recovery from operating-system failure, disk loss, or unrelated application corruption.
+
 ## One-command trial
 
-Run the root launcher outside Codex:
+Run outside Codex:
 
 ```cmd
 restart-codex-theme.cmd
@@ -23,26 +39,25 @@ restart-codex-theme.cmd
 
 It defaults to the dark theme. Use `restart-codex-theme.cmd light` for the light theme.
 
-The launcher resolves the installed Microsoft Store Codex package, creates a stable isolated Chromium profile under `%LOCALAPPDATA%\CodeDrobe\profiles\xjtu-codex-theme`, restarts Codex on loopback port 9335, then runs CodeDrobe inspect, probe, apply, and verify. The isolated profile is required because the Store build ignored remote debugging when launched against its default Chromium profile.
-
-The first run may download `@codedrobe/core@0.6.1` into `%LOCALAPPDATA%\CodeDrobe\npm-cache` and may require signing in to the isolated Codex profile. Existing Codex browser data is not copied.
+The first run may download `@codedrobe/core@0.6.1` into `%LOCALAPPDATA%\CodeDrobe\npm-cache`. The isolated profile may require sign-in; existing cookies and login data are never copied.
 
 ## Restore
 
-While the themed Codex instance is running, use:
+Run:
 
 ```cmd
 restore-codex-theme.cmd
 ```
 
-CodeDrobe restores its managed Codex appearance settings even if the renderer connection is no longer available.
+The restore script uses CodeDrobe when available, then independently restores the SHA-256-verified config snapshot, closes the isolated instance, and starts normal Codex. Snapshot files are retained for audit; only the active pointer is cleared after successful restoration.
 
 ## Verified state
 
 - Both packages were created and inspected with `@codedrobe/core` 0.6.1.
 - Both packages target the `codex` adapter, use schema version 1, and embed one named `hero` image.
-- PowerShell parsing plus dark, light, and restore `-DryRun` checks passed on 2026-07-20 without changing processes, profiles, ports, or theme state.
-- Live application, renderer, and screenshot verification remain pending until the user runs the restart script.
+- PowerShell parsing, dark/light/restore DryRun, and a temporary-file backup/mutate/restore SHA-256 exercise passed on 2026-07-20 without touching the real Codex config.
+- A separate current-state baseline copy of `~/.codex/config.toml` was created under the private backup root and verified against SHA-256 `28FED8BDAE28692984D097A6E13590B5FDF3C5983ECD2372691FA284C6EEDECA`.
+- Live renderer and visual verification remain pending until the user runs the restart script.
 
 ## Tool boundary
 

@@ -8,6 +8,7 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
+. (Join-Path $PSScriptRoot "theme-safety.ps1")
 
 $CorePackage = "@codedrobe/core@0.6.1"
 $AppId = "codex"
@@ -17,6 +18,10 @@ $ThemePackage = Join-Path $ProjectRoot "dist\xjtu-academic-$Theme-0.1.0.codedrob
 $CodeDrobeRoot = Join-Path $env:LOCALAPPDATA "CodeDrobe"
 $ProfilePath = Join-Path $CodeDrobeRoot "profiles\xjtu-codex-theme"
 $NpmCache = Join-Path $CodeDrobeRoot "npm-cache"
+$BackupRoot = Join-Path $CodeDrobeRoot "backups\xjtu-codex-theme"
+$CodeDrobeBackupPath = Join-Path $CodeDrobeRoot "config.before-codedrobe.toml"
+$LockPath = Join-Path $CodeDrobeRoot "xjtu-codex-theme.lock"
+$ConfigPath = Join-Path $HOME ".codex\config.toml"
 
 function Invoke-CodeDrobe {
     param(
@@ -31,94 +36,107 @@ function Invoke-CodeDrobe {
     }
 }
 
-function Resolve-CodexExecutable {
-    $package = Get-AppxPackage -Name "OpenAI.Codex" -ErrorAction Stop |
-        Sort-Object Version -Descending |
-        Select-Object -First 1
-
-    if (-not $package) {
-        throw "Microsoft Store Codex package OpenAI.Codex was not found."
-    }
-
-    [xml]$manifest = Get-AppxPackageManifest -Package $package
-    $application = @($manifest.Package.Applications.Application) |
-        Where-Object { $_.Id -eq "App" } |
-        Select-Object -First 1
-
-    if (-not $application -or -not $application.Executable) {
-        throw "Codex AppX executable was not declared in the package manifest."
-    }
-
-    $relativeExecutable = ([string]$application.Executable) -replace "/", "\"
-    $executable = Join-Path $package.InstallLocation $relativeExecutable
-    if (-not (Test-Path -LiteralPath $executable -PathType Leaf)) {
-        throw "Codex executable was not found at $executable"
-    }
-
-    return [pscustomobject]@{
-        Version = [string]$package.Version
-        Executable = $executable
-    }
-}
-
 if (-not (Get-Command npx.cmd -ErrorAction SilentlyContinue)) {
     throw "npx.cmd was not found. Install Node.js/npm before running this launcher."
 }
-
 if (-not (Test-Path -LiteralPath $ThemePackage -PathType Leaf)) {
     throw "Theme package was not found: $ThemePackage"
 }
+if (-not (Test-Path -LiteralPath $ConfigPath -PathType Leaf)) {
+    throw "Codex config was not found: $ConfigPath"
+}
 
-$codex = Resolve-CodexExecutable
+$codex = Resolve-XjtuCodexExecutable
+$staleCodeDrobeBackup = Test-Path -LiteralPath $CodeDrobeBackupPath -PathType Leaf
 
-Write-Host "XJTU Codex Theme launcher" -ForegroundColor Green
+Write-Host "XJTU Codex Theme guarded launcher" -ForegroundColor Green
 Write-Host "  Theme:       $Theme"
 Write-Host "  Package:     $ThemePackage"
 Write-Host "  Codex:       $($codex.Version)"
 Write-Host "  Executable:  $($codex.Executable)"
+Write-Host "  Config:      $ConfigPath"
+Write-Host "  Backup root: $BackupRoot"
 Write-Host "  CDP:         127.0.0.1:$Port"
 Write-Host "  Profile:     $ProfilePath"
 Write-Host "  Core:        $CorePackage"
 
+if ($staleCodeDrobeBackup) {
+    throw "CodeDrobe already has an unresolved backup at $CodeDrobeBackupPath. Run restore-codex-theme.cmd before another trial."
+}
+
 if ($DryRun) {
-    Write-Host "Dry run passed. No process, profile, port, or theme state was changed." -ForegroundColor Green
+    Write-Host "Dry run passed. No process, snapshot, profile, port, or theme state was changed." -ForegroundColor Green
     exit 0
 }
 
-New-Item -ItemType Directory -Force -Path $NpmCache, $ProfilePath | Out-Null
+New-Item -ItemType Directory -Force -Path $NpmCache, $ProfilePath, $BackupRoot | Out-Null
 $env:npm_config_cache = $NpmCache
+$lock = Enter-XjtuThemeLock -Path $LockPath
+$snapshot = $null
+$codexRestarted = $false
 
-Write-Warning "All running Codex windows will be closed. The isolated profile may require sign-in on first use."
+try {
+    $snapshot = New-XjtuConfigSnapshot -ConfigPath $ConfigPath -BackupRoot $BackupRoot -Theme $Theme -CodexVersion $codex.Version
+    Write-Host "Config snapshot verified: $($snapshot.BackupPath)" -ForegroundColor Green
+    Write-Host "Snapshot SHA-256: $($snapshot.SHA256)"
+    Write-Warning "All running Codex windows will be closed. The isolated profile may require sign-in on first use."
 
-Invoke-CodeDrobe -Arguments @("theme", "inspect", $ThemePackage)
-Invoke-CodeDrobe -Arguments @(
-    "launch",
-    "--app", $AppId,
-    "--app-path", $codex.Executable,
-    "--port", [string]$Port,
-    "--profile", $ProfilePath,
-    "--restart-existing"
-)
-Invoke-CodeDrobe -Arguments @(
-    "probe",
-    "--app", $AppId,
-    "--port", [string]$Port,
-    "--theme", $ThemePackage,
-    "--timeout-ms", "10000"
-)
-Invoke-CodeDrobe -Arguments @(
-    "apply",
-    "--app", $AppId,
-    "--port", [string]$Port,
-    "--theme", $ThemePackage,
-    "--no-launch"
-)
-Invoke-CodeDrobe -Arguments @(
-    "verify",
-    "--app", $AppId,
-    "--port", [string]$Port,
-    "--theme", $ThemePackage
-)
+    Invoke-CodeDrobe -Arguments @("theme", "inspect", $ThemePackage)
+    $codexRestarted = $true
+    Invoke-CodeDrobe -Arguments @(
+        "launch",
+        "--app", $AppId,
+        "--app-path", $codex.Executable,
+        "--port", [string]$Port,
+        "--profile", $ProfilePath,
+        "--restart-existing"
+    )
+    Invoke-CodeDrobe -Arguments @(
+        "probe",
+        "--app", $AppId,
+        "--port", [string]$Port,
+        "--theme", $ThemePackage,
+        "--timeout-ms", "10000"
+    )
+    Invoke-CodeDrobe -Arguments @(
+        "apply",
+        "--app", $AppId,
+        "--port", [string]$Port,
+        "--theme", $ThemePackage,
+        "--no-launch"
+    )
+    Invoke-CodeDrobe -Arguments @(
+        "verify",
+        "--app", $AppId,
+        "--port", [string]$Port,
+        "--theme", $ThemePackage
+    )
 
-Write-Host "Theme '$Theme' is applied and verified for the current Codex renderer." -ForegroundColor Green
-Write-Host "Restore with: $ProjectRoot\restore-codex-theme.cmd"
+    Write-Host "Theme '$Theme' is applied and verified for the current Codex renderer." -ForegroundColor Green
+    Write-Host "Restore with: $ProjectRoot\restore-codex-theme.cmd"
+} catch {
+    $failure = $_
+    Write-Warning "Theme trial failed. Starting automatic rollback."
+
+    try {
+        & npx.cmd --yes $CorePackage "restore" "--app" $AppId "--port" ([string]$Port)
+    } catch {
+        Write-Warning "CodeDrobe restore was unavailable; independent config restoration will continue."
+    }
+
+    if ($snapshot) {
+        $restored = Restore-XjtuConfigSnapshot -BackupRoot $BackupRoot -ExpectedConfigPath $ConfigPath
+        Write-Host "Independent config restore verified: $($restored.SHA256)" -ForegroundColor Green
+    }
+
+    if ($codexRestarted) {
+        Stop-XjtuCodexProcesses -Executable $codex.Executable
+        Start-XjtuNormalCodex -Executable $codex.Executable
+    }
+
+    throw $failure
+} finally {
+    if ($lock) {
+        $lock.Dispose()
+    }
+}

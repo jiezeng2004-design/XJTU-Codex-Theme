@@ -14,8 +14,8 @@ npx.cmd --yes @codedrobe/core@0.6.1 theme pack .\xjtu-academic-light\theme.json 
 npx.cmd --yes @codedrobe/core@0.6.1 theme pack .\xjtu-academic-dark\theme.json --output ..\dist\xjtu-academic-dark-0.1.0.codedrobe-theme
 ```
 
-## Trial
+## Guarded trial
 
-Use the root `restart-codex-theme.cmd` launcher. It defaults to the dark theme and accepts `light` as its only alternate argument. The launcher uses an isolated Chromium profile and performs inspect, launch, probe, apply, and verify in order.
+Use the root `restart-codex-theme.cmd` launcher. It defaults to the dark theme and accepts `light` as its only alternate argument. The launcher uses an isolated Chromium profile, creates and verifies an independent Codex config snapshot, and performs inspect, launch, probe, apply, and verify in order. Any failure triggers best-effort CodeDrobe restore plus independent config restoration and normal Codex relaunch.
 
-Live selectors still require final validation on the current Microsoft Store Codex renderer. Do not claim visual compatibility until the scripted verify step passes and the user inspects both home and conversation contexts.
+Live selectors still require final validation on the current Microsoft Store Codex renderer. Do not claim visual compatibility until scripted verify passes and the user inspects both home and conversation contexts.
