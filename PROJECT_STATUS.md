@@ -1,6 +1,6 @@
-# XJTU Codex Theme - Suspended
+# XJTU Codex Theme - Trial Ready
 
-Status: suspended on 2026-07-19.
+Status: ready for scripted local trial on 2026-07-20.
 
 ## Preserved deliverables
 
@@ -13,23 +13,37 @@ Status: suspended on 2026-07-19.
 
 The source themes use package-optimized JPEG hero assets. The approved PNG originals remain in `assets/backgrounds/`.
 
+## One-command trial
+
+Run the root launcher outside Codex:
+
+```cmd
+restart-codex-theme.cmd
+```
+
+It defaults to the dark theme. Use `restart-codex-theme.cmd light` for the light theme.
+
+The launcher resolves the installed Microsoft Store Codex package, creates a stable isolated Chromium profile under `%LOCALAPPDATA%\CodeDrobe\profiles\xjtu-codex-theme`, restarts Codex on loopback port 9335, then runs CodeDrobe inspect, probe, apply, and verify. The isolated profile is required because the Store build ignored remote debugging when launched against its default Chromium profile.
+
+The first run may download `@codedrobe/core@0.6.1` into `%LOCALAPPDATA%\CodeDrobe\npm-cache` and may require signing in to the isolated Codex profile. Existing Codex browser data is not copied.
+
+## Restore
+
+While the themed Codex instance is running, use:
+
+```cmd
+restore-codex-theme.cmd
+```
+
+CodeDrobe restores its managed Codex appearance settings even if the renderer connection is no longer available.
+
 ## Verified state
 
 - Both packages were created and inspected with `@codedrobe/core` 0.6.1.
 - Both packages target the `codex` adapter, use schema version 1, and embed one named `hero` image.
-- Package inspection reported only missing store catalog metadata. This does not affect local use.
-- The current Microsoft Store Codex build is `26.715.4045.0`.
+- PowerShell parsing plus dark, light, and restore `-DryRun` checks passed on 2026-07-20 without changing processes, profiles, ports, or theme state.
+- Live application, renderer, and screenshot verification remain pending until the user runs the restart script.
 
-## Not completed
+## Tool boundary
 
-- No theme was applied to Codex.
-- No live DOM snapshot, probe, renderer verification, or screenshot verification was completed.
-- The Store edition accepted a restart but did not retain CodeDrobe's `--remote-debugging-port=9335` argument. The actual main `ChatGPT.exe` process had no remote-debugging flag and port 9335 was not listening.
-
-## Resume boundary
-
-Do not retry application or alter CodeDrobe/Core runtime files without explicit authorization. Resolving the Microsoft Store CDP limitation may require a separate Codex profile, which can require a new local user-data directory and sign-in.
-
-## Tool state
-
-CodeDrobe was run only through a workspace-local `npx` cache. No CodeDrobe global command, Codex Skill, or MCP server is installed or enabled. The cache is intentionally retained for reproducibility and can remain unused while this project is suspended.
+CodeDrobe remains an on-demand `npx` dependency. No global CodeDrobe command, Codex Skill, or MCP server is installed or enabled. The launcher binds CDP to `127.0.0.1` only and does not patch WindowsApps or edit CodeDrobe runtime files.

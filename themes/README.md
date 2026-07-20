@@ -10,9 +10,12 @@ Both themes target the CodeDrobe `codex` app adapter and embed a high-quality, p
 ## Build
 
 ```powershell
-$env:npm_config_cache='D:\ai_agent\codex_program\.codex-tmp\codedrobe-npm-cache'
-npx.cmd --yes @codedrobe/core@latest theme pack .\xjtu-academic-light\theme.json --output ..\dist\xjtu-academic-light-0.1.0.codedrobe-theme
-npx.cmd --yes @codedrobe/core@latest theme pack .\xjtu-academic-dark\theme.json --output ..\dist\xjtu-academic-dark-0.1.0.codedrobe-theme
+npx.cmd --yes @codedrobe/core@0.6.1 theme pack .\xjtu-academic-light\theme.json --output ..\dist\xjtu-academic-light-0.1.0.codedrobe-theme
+npx.cmd --yes @codedrobe/core@0.6.1 theme pack .\xjtu-academic-dark\theme.json --output ..\dist\xjtu-academic-dark-0.1.0.codedrobe-theme
 ```
 
-The packages can be inspected offline. Live `probe`, `apply`, and `verify` require Codex to expose a loopback CDP port and must not restart an existing Codex process without explicit authorization.
+## Trial
+
+Use the root `restart-codex-theme.cmd` launcher. It defaults to the dark theme and accepts `light` as its only alternate argument. The launcher uses an isolated Chromium profile and performs inspect, launch, probe, apply, and verify in order.
+
+Live selectors still require final validation on the current Microsoft Store Codex renderer. Do not claim visual compatibility until the scripted verify step passes and the user inspects both home and conversation contexts.
