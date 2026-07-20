@@ -4,8 +4,8 @@
   --xjtu-bg: #071429;
   --xjtu-surface: rgba(10, 26, 49, .62);
   --xjtu-surface-strong: rgba(12, 31, 57, .84);
-  --xjtu-main-surface: rgba(8, 23, 45, .20);
-  --xjtu-sidebar: rgba(7, 21, 42, .78);
+  --xjtu-main-surface: rgba(6, 16, 31, .06);
+  --xjtu-sidebar: rgba(6, 15, 29, .74);
   --xjtu-text: #e7edf5;
   --xjtu-muted: #a5b2c3;
   --xjtu-accent: #d2a15b;
@@ -14,7 +14,7 @@
   --xjtu-border: rgba(167, 190, 216, .19);
   --xjtu-shadow: rgba(0, 7, 18, .42);
 
-  --color-token-bg-primary: rgba(7, 20, 41, .38) !important;
+  --color-token-bg-primary: rgba(7, 20, 41, .04) !important;
   --color-token-bg-secondary: var(--xjtu-surface) !important;
   --color-token-main-surface-primary: var(--xjtu-main-surface) !important;
   --color-token-side-bar-background: var(--xjtu-sidebar) !important;
@@ -34,11 +34,11 @@
 html.codedrobe-host-codex body {
   background-color: var(--xjtu-bg) !important;
   background-image:
-    linear-gradient(90deg, rgba(5, 15, 33, .66) 0 42%, rgba(5, 15, 33, .34) 62%, rgba(5, 15, 33, .12) 100%),
+    linear-gradient(90deg, rgba(3, 10, 22, .38) 0 24%, rgba(3, 10, 22, .14) 48%, rgba(3, 10, 22, .08) 100%),
     var(--codedrobe-image-hero, linear-gradient(135deg, #071429, #163661)) !important;
-  background-position: center, center !important;
+  background-position: center, 68% center !important;
   background-repeat: no-repeat !important;
-  background-size: cover !important;
+  background-size: cover, auto 116% !important;
   background-attachment: fixed !important;
   color: var(--xjtu-text) !important;
 }
@@ -48,8 +48,8 @@ html.codedrobe-host-codex aside.app-shell-left-panel {
   border-right: 1px solid var(--xjtu-border) !important;
   box-shadow: 10px 0 32px rgba(0, 7, 18, .34) !important;
   color: var(--xjtu-text) !important;
-  backdrop-filter: blur(22px) saturate(1.10);
-  -webkit-backdrop-filter: blur(22px) saturate(1.10);
+  backdrop-filter: blur(6px) saturate(1.04);
+  -webkit-backdrop-filter: blur(6px) saturate(1.04);
 }
 
 html.codedrobe-host-codex aside.app-shell-left-panel :is(a, button) {
@@ -71,22 +71,20 @@ html.codedrobe-host-codex aside.app-shell-left-panel :is([aria-current="page"], 
 html.codedrobe-host-codex main.main-surface {
   position: relative;
   background: var(--xjtu-main-surface) !important;
-  border: 1px solid var(--xjtu-border) !important;
-  border-right: 0 !important;
-  border-bottom: 0 !important;
-  border-radius: 22px 0 0 !important;
-  box-shadow: -10px 0 36px rgba(0, 7, 18, .30) !important;
-  backdrop-filter: blur(6px) saturate(1.04);
-  -webkit-backdrop-filter: blur(6px) saturate(1.04);
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: inset 1px 0 rgba(167, 190, 216, .10) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 html.codedrobe-host-codex main.main-surface > header,
 html.codedrobe-host-codex header.app-header-tint {
-  background: rgba(10, 27, 51, .68) !important;
+  background: rgba(6, 17, 33, .28) !important;
   border-bottom: 1px solid var(--xjtu-border) !important;
   color: var(--xjtu-text) !important;
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
 }
 
 html.codedrobe-host-codex [role="main"] {
@@ -97,10 +95,10 @@ html.codedrobe-host-codex [role="main"] {
 html.codedrobe-host-codex .group\/home-suggestions > * {
   border: 1px solid var(--xjtu-border) !important;
   border-radius: 16px !important;
-  background: rgba(11, 29, 54, .72) !important;
+  background: rgba(8, 20, 38, .84) !important;
   box-shadow: 0 10px 26px rgba(0, 7, 18, .28) !important;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 html.codedrobe-host-codex .composer-surface-chrome {
@@ -109,8 +107,8 @@ html.codedrobe-host-codex .composer-surface-chrome {
   background: var(--xjtu-surface-strong) !important;
   color: var(--xjtu-text) !important;
   box-shadow: 0 14px 36px var(--xjtu-shadow) !important;
-  backdrop-filter: blur(20px) saturate(1.10);
-  -webkit-backdrop-filter: blur(20px) saturate(1.10);
+  backdrop-filter: blur(8px) saturate(1.06);
+  -webkit-backdrop-filter: blur(8px) saturate(1.06);
 }
 
 html.codedrobe-host-codex .composer-surface-chrome :is(textarea, .ProseMirror, [contenteditable="true"]) {
