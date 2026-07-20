@@ -26,7 +26,7 @@ Before any process is closed, the launcher:
 4. verifies the snapshot with SHA-256 and records an active restore pointer;
 5. acquires an exclusive lock so launch and restore cannot run concurrently.
 
-CodeDrobe also creates its own transactional backup. If inspect, launch, probe, apply, or verify fails, the launcher attempts CodeDrobe restore, restores the independently verified config snapshot, closes the isolated instance, and starts normal Codex without a custom profile.
+CodeDrobe also creates its own transactional backup. After inspect, one guarded `apply --restart-existing` operation performs launch, DOM preflight, compatible-target injection, and built-in verification. If inspect or apply fails, the launcher attempts CodeDrobe restore, restores the independently verified config snapshot, closes the isolated instance, and starts normal Codex without a custom profile.
 
 This protects the files and settings touched by the workflow. It cannot guarantee recovery from operating-system failure, disk loss, or unrelated application corruption.
 
@@ -57,6 +57,7 @@ The restore script uses CodeDrobe when available, then independently restores th
 - A guarded live trial of version 0.1.0 reached launch and probe, then failed at apply because the optional `codex-theme-v1` renderer profile required noninteractive chrome that Codex 26.715.7063.0 did not provide. Automatic CodeDrobe restore and the independent SHA-256 config restore both completed successfully.
 - Version 0.1.1 removes that optional renderer profile. The XJTU background and glass styling remain implemented by the themes' own CSS and named `hero` image.
 - A version 0.1.1 visual trial confirmed that the artwork loaded, but the 46–48% main content tint plus 18px backdrop blur obscured the right-side campus focal point. Version 0.1.2 reduces the main tint to 20% dark / 22% light and the main backdrop blur to 6px while retaining stronger local surfaces for text and controls.
+- A subsequent 0.1.2 trial exposed two Codex renderer targets: the compatible main window and an `avatar-overlay` utility window without `main.main-surface`. CodeDrobe's standalone `probe` rejects the whole session when any target is incompatible, while `apply` is explicitly designed to skip incompatible secondary windows and verify each compatible target. The launcher now uses that single guarded apply flow instead of redundant standalone probe/verify commands.
 - Both 0.1.2 packages were created and inspected with `@codedrobe/core` 0.6.1; neither package contains `rendererProfile`.
 - Both packages target the `codex` adapter, use schema version 1, and embed one named `hero` image.
 - PowerShell parsing, dark/light/restore DryRun, and a temporary-file backup/mutate/restore SHA-256 exercise passed on 2026-07-20 without touching the real Codex config.

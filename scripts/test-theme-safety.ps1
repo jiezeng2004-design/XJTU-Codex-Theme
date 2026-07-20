@@ -5,6 +5,39 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 . (Join-Path $PSScriptRoot "theme-safety.ps1")
 
+$launcherPath = Join-Path $PSScriptRoot "restart-codex-theme.ps1"
+$launcherTokens = $null
+$launcherErrors = $null
+$launcherAst = [System.Management.Automation.Language.Parser]::ParseFile(
+    $launcherPath,
+    [ref]$launcherTokens,
+    [ref]$launcherErrors
+)
+if ($launcherErrors.Count) {
+    throw "Launcher parse failed: $($launcherErrors[0].Message)"
+}
+
+$launcherStrings = @(
+    $launcherAst.FindAll({
+        param($node)
+        $node -is [System.Management.Automation.Language.StringConstantExpressionAst]
+    }, $true) | ForEach-Object { $_.Value }
+)
+if (@($launcherStrings | Where-Object { $_ -eq "apply" }).Count -ne 1) {
+    throw "Launcher must contain exactly one CodeDrobe apply command."
+}
+foreach ($disallowedCommand in @("launch", "probe", "verify")) {
+    if ($launcherStrings -contains $disallowedCommand) {
+        throw "Launcher must not use standalone CodeDrobe '$disallowedCommand'; apply owns launch, target filtering, and verification."
+    }
+}
+foreach ($requiredOption in @("--app", "--theme", "--app-path", "--port", "--profile", "--restart-existing")) {
+    if ($launcherStrings -notcontains $requiredOption) {
+        throw "Launcher apply command is missing required option: $requiredOption"
+    }
+}
+Write-Host "PASS single guarded apply owns launch, compatible-target filtering, and verification" -ForegroundColor Green
+
 $testRoot = Join-Path $env:TEMP ("XjtuThemeSafety-{0}" -f $PID)
 $configPath = Join-Path $testRoot "home\.codex\config.toml"
 $backupRoot = Join-Path $testRoot "backups"

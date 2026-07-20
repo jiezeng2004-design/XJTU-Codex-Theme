@@ -82,37 +82,22 @@ try {
     Write-Warning "All running Codex windows will be closed. The isolated profile may require sign-in on first use."
 
     Invoke-CodeDrobe -Arguments @("theme", "inspect", $ThemePackage)
+    # CodeDrobe apply performs its own DOM preflight, skips incompatible
+    # secondary renderer targets, and verifies every compatible target after
+    # injection. A separate probe/verify is stricter and incorrectly rejects
+    # Codex utility windows such as app://-/index.html?initialRoute=/avatar-overlay.
     $codexRestarted = $true
     Invoke-CodeDrobe -Arguments @(
-        "launch",
+        "apply",
         "--app", $AppId,
+        "--theme", $ThemePackage,
         "--app-path", $codex.Executable,
         "--port", [string]$Port,
         "--profile", $ProfilePath,
         "--restart-existing"
     )
-    Invoke-CodeDrobe -Arguments @(
-        "probe",
-        "--app", $AppId,
-        "--port", [string]$Port,
-        "--theme", $ThemePackage,
-        "--timeout-ms", "10000"
-    )
-    Invoke-CodeDrobe -Arguments @(
-        "apply",
-        "--app", $AppId,
-        "--port", [string]$Port,
-        "--theme", $ThemePackage,
-        "--no-launch"
-    )
-    Invoke-CodeDrobe -Arguments @(
-        "verify",
-        "--app", $AppId,
-        "--port", [string]$Port,
-        "--theme", $ThemePackage
-    )
 
-    Write-Host "Theme '$Theme' is applied and verified for the current Codex renderer." -ForegroundColor Green
+    Write-Host "Theme '$Theme' is applied and internally verified for compatible Codex renderer targets." -ForegroundColor Green
     Write-Host "Restore with: $ProjectRoot\restore-codex-theme.cmd"
 } catch {
     $failure = $_
