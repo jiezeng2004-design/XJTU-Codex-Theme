@@ -4,6 +4,7 @@
   --xjtu-bg: #071429;
   --xjtu-surface: rgba(10, 26, 49, .62);
   --xjtu-surface-strong: rgba(12, 31, 57, .84);
+  --xjtu-main-surface: rgba(8, 23, 45, .20);
   --xjtu-sidebar: rgba(7, 21, 42, .78);
   --xjtu-text: #e7edf5;
   --xjtu-muted: #a5b2c3;
@@ -15,7 +16,7 @@
 
   --color-token-bg-primary: rgba(7, 20, 41, .38) !important;
   --color-token-bg-secondary: var(--xjtu-surface) !important;
-  --color-token-main-surface-primary: var(--xjtu-surface) !important;
+  --color-token-main-surface-primary: var(--xjtu-main-surface) !important;
   --color-token-side-bar-background: var(--xjtu-sidebar) !important;
   --color-token-foreground: var(--xjtu-text) !important;
   --color-token-text-primary: var(--xjtu-text) !important;
@@ -69,14 +70,14 @@ html.codedrobe-host-codex aside.app-shell-left-panel :is([aria-current="page"], 
 
 html.codedrobe-host-codex main.main-surface {
   position: relative;
-  background: rgba(8, 23, 45, .48) !important;
+  background: var(--xjtu-main-surface) !important;
   border: 1px solid var(--xjtu-border) !important;
   border-right: 0 !important;
   border-bottom: 0 !important;
   border-radius: 22px 0 0 !important;
   box-shadow: -10px 0 36px rgba(0, 7, 18, .30) !important;
-  backdrop-filter: blur(18px) saturate(1.08);
-  -webkit-backdrop-filter: blur(18px) saturate(1.08);
+  backdrop-filter: blur(6px) saturate(1.04);
+  -webkit-backdrop-filter: blur(6px) saturate(1.04);
 }
 
 html.codedrobe-host-codex main.main-surface > header,

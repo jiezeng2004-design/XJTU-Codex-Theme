@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "xjtu-academic-dark",
   "displayName": "XJTU Academic Dark",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "images": {
     "hero": "assets/hero.jpg"
   },

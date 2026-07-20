@@ -8,9 +8,9 @@ Status: ready for a guarded local retry on Codex 26.715.7063.0 as of 2026-07-20.
 - `assets/backgrounds/xjtu-campus-dark-v1-2560x1440.png`: matching dark campus background.
 - `themes/xjtu-academic-light/`: CodeDrobe source for the light Codex theme.
 - `themes/xjtu-academic-dark/`: CodeDrobe source for the dark Codex theme.
-- `dist/xjtu-academic-light-0.1.1.codedrobe-theme`: current packaged light theme.
-- `dist/xjtu-academic-dark-0.1.1.codedrobe-theme`: current packaged dark theme.
-- `dist/*-0.1.0.codedrobe-theme`: retained legacy packages; do not use them with Codex 26.715.7063.0.
+- `dist/xjtu-academic-light-0.1.2.codedrobe-theme`: current packaged light theme.
+- `dist/xjtu-academic-dark-0.1.2.codedrobe-theme`: current packaged dark theme.
+- `dist/*-0.1.0.codedrobe-theme` and `dist/*-0.1.1.codedrobe-theme`: retained legacy packages; do not use them for the current trial.
 
 The source themes use package-optimized JPEG hero assets. The approved PNG originals remain in `assets/backgrounds/`.
 
@@ -56,12 +56,13 @@ The restore script uses CodeDrobe when available, then independently restores th
 
 - A guarded live trial of version 0.1.0 reached launch and probe, then failed at apply because the optional `codex-theme-v1` renderer profile required noninteractive chrome that Codex 26.715.7063.0 did not provide. Automatic CodeDrobe restore and the independent SHA-256 config restore both completed successfully.
 - Version 0.1.1 removes that optional renderer profile. The XJTU background and glass styling remain implemented by the themes' own CSS and named `hero` image.
-- Both 0.1.1 packages were created and inspected with `@codedrobe/core` 0.6.1; neither package contains `rendererProfile`.
+- A version 0.1.1 visual trial confirmed that the artwork loaded, but the 46–48% main content tint plus 18px backdrop blur obscured the right-side campus focal point. Version 0.1.2 reduces the main tint to 20% dark / 22% light and the main backdrop blur to 6px while retaining stronger local surfaces for text and controls.
+- Both 0.1.2 packages were created and inspected with `@codedrobe/core` 0.6.1; neither package contains `rendererProfile`.
 - Both packages target the `codex` adapter, use schema version 1, and embed one named `hero` image.
 - PowerShell parsing, dark/light/restore DryRun, and a temporary-file backup/mutate/restore SHA-256 exercise passed on 2026-07-20 without touching the real Codex config.
 - After verification there was no active XJTU snapshot, no unresolved CodeDrobe transactional backup, and no listener on port 9335.
 - A separate current-state baseline copy of `~/.codex/config.toml` was created under the private backup root and verified against SHA-256 `28FED8BDAE28692984D097A6E13590B5FDF3C5983ECD2372691FA284C6EEDECA`.
-- Live apply and visual verification of version 0.1.1 remain pending until the user runs the restart script.
+- Live apply and visual verification of version 0.1.2 remain pending until the user runs the restart script.
 
 ## Tool boundary
 
