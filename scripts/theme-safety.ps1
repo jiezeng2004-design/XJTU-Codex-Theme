@@ -111,6 +111,7 @@ function New-XjtuConfigSnapshot {
         ManifestPath = $manifestPath
         BackupPath = $backupPath
         SHA256 = $backupHash
+        Theme = $Theme
     }
 }
 
@@ -134,6 +135,10 @@ function Get-XjtuActiveSnapshot {
     if ($manifest.schemaVersion -ne 1 -or -not $manifest.backupPath -or -not $manifest.sha256) {
         throw "The active snapshot manifest is invalid."
     }
+    $theme = [string]$manifest.theme
+    if ($theme -notin @("dark", "light")) {
+        throw "The active snapshot has an invalid theme value."
+    }
 
     return [pscustomobject]@{
         ActivePath = $activePath
@@ -141,7 +146,34 @@ function Get-XjtuActiveSnapshot {
         ConfigPath = [string]$manifest.configPath
         BackupPath = [string]$manifest.backupPath
         SHA256 = [string]$manifest.sha256
+        Theme = $theme
     }
+}
+
+function Resolve-XjtuSwitchTarget {
+    param(
+        [Parameter(Mandatory = $true)]
+        [ValidateSet("toggle", "dark", "light")]
+        [string]$RequestedTheme,
+
+        [AllowNull()]
+        [AllowEmptyString()]
+        [string]$CurrentTheme
+    )
+
+    if ($RequestedTheme -ne "toggle") {
+        return $RequestedTheme
+    }
+    if (-not $CurrentTheme) {
+        return "dark"
+    }
+    if ($CurrentTheme -eq "dark") {
+        return "light"
+    }
+    if ($CurrentTheme -eq "light") {
+        return "dark"
+    }
+    throw "Cannot toggle an unknown current theme: $CurrentTheme"
 }
 
 function Restore-XjtuConfigSnapshot {

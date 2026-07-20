@@ -38,6 +38,21 @@ foreach ($requiredOption in @("--app", "--theme", "--app-path", "--port", "--pro
 }
 Write-Host "PASS single guarded apply owns launch, compatible-target filtering, and verification" -ForegroundColor Green
 
+$switchCases = @(
+    @{ Requested = "toggle"; Current = $null; Expected = "dark" },
+    @{ Requested = "toggle"; Current = "dark"; Expected = "light" },
+    @{ Requested = "toggle"; Current = "light"; Expected = "dark" },
+    @{ Requested = "dark"; Current = "light"; Expected = "dark" },
+    @{ Requested = "light"; Current = "dark"; Expected = "light" }
+)
+foreach ($case in $switchCases) {
+    $actual = Resolve-XjtuSwitchTarget -RequestedTheme $case.Requested -CurrentTheme $case.Current
+    if ($actual -ne $case.Expected) {
+        throw "Switch target mismatch: requested=$($case.Requested), current=$($case.Current), expected=$($case.Expected), actual=$actual"
+    }
+}
+Write-Host "PASS toggle/dark/light target resolution" -ForegroundColor Green
+
 $testRoot = Join-Path $env:TEMP ("XjtuThemeSafety-{0}" -f $PID)
 $configPath = Join-Path $testRoot "home\.codex\config.toml"
 $backupRoot = Join-Path $testRoot "backups"
@@ -55,6 +70,13 @@ appearanceTheme = "system"
     $snapshot = New-XjtuConfigSnapshot -ConfigPath $configPath -BackupRoot $backupRoot -Theme "dark" -CodexVersion "test"
     if ($snapshot.SHA256 -ne $originalHash) {
         throw "Snapshot hash did not match the original test config."
+    }
+    if ($snapshot.Theme -ne "dark") {
+        throw "Snapshot did not retain the selected theme."
+    }
+    $activeSnapshot = Get-XjtuActiveSnapshot -BackupRoot $backupRoot
+    if ($activeSnapshot.Theme -ne "dark") {
+        throw "Active snapshot did not expose the selected theme."
     }
 
     Add-Content -LiteralPath $configPath -Value "changed = true" -Encoding UTF8

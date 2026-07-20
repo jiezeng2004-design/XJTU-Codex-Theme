@@ -8,6 +8,7 @@ Status: ready for a guarded local retry on Codex 26.715.7063.0 as of 2026-07-20.
 - `assets/backgrounds/xjtu-campus-dark-v1-2560x1440.png`: matching dark campus background.
 - `themes/xjtu-academic-light/`: CodeDrobe source for the light Codex theme.
 - `themes/xjtu-academic-dark/`: CodeDrobe source for the dark Codex theme.
+- `switch-codex-theme.cmd`: one-click safe toggle, with optional `dark` or `light` target.
 - `dist/xjtu-academic-light-0.1.3.codedrobe-theme`: current packaged light theme.
 - `dist/xjtu-academic-dark-0.1.3.codedrobe-theme`: current packaged dark theme.
 - `dist/*-0.1.0.codedrobe-theme` through `dist/*-0.1.2.codedrobe-theme`: retained historical packages; do not use them for the current trial.
@@ -30,6 +31,8 @@ CodeDrobe also creates its own transactional backup. After inspect, one guarded 
 
 This protects the files and settings touched by the workflow. It cannot guarantee recovery from operating-system failure, disk loss, or unrelated application corruption.
 
+The switch wrapper never overwrites an active snapshot. It restores and verifies the current trial first, then lets the normal guarded launcher create a new snapshot for the target theme. An unresolved CodeDrobe backup without an active XJTU snapshot stops the switch instead of guessing.
+
 ## One-command trial
 
 Run outside Codex:
@@ -39,6 +42,14 @@ restart-codex-theme.cmd
 ```
 
 It defaults to the dark theme. Use `restart-codex-theme.cmd light` for the light theme.
+
+To toggle the currently active XJTU theme in one operation, run:
+
+```cmd
+switch-codex-theme.cmd
+```
+
+The same wrapper accepts `dark` or `light` to select an explicit target. Switching restores the current trial before applying the target; Codex restarts as part of the guarded sequence.
 
 The first run may download `@codedrobe/core@0.6.1` into `%LOCALAPPDATA%\CodeDrobe\npm-cache`. The isolated profile may require sign-in; existing cookies and login data are never copied.
 
@@ -61,10 +72,10 @@ The restore script uses CodeDrobe when available, then independently restores th
 - Version 0.1.3 follows a wallpaper-first enlarged reference: the hero layer is rendered at 116% height and positioned at 68% horizontally, the main surface uses only 6% dark / 8% light tint with no full-panel backdrop blur, and stronger opacity is restricted to the sidebar, cards, header, and composer.
 - Both 0.1.3 packages were created and inspected with `@codedrobe/core` 0.6.1; neither package contains `rendererProfile`.
 - Both packages target the `codex` adapter, use schema version 1, and embed one named `hero` image.
-- PowerShell parsing, dark/light/restore DryRun, and a temporary-file backup/mutate/restore SHA-256 exercise passed on 2026-07-20 without touching the real Codex config.
-- After verification there was no active XJTU snapshot, no unresolved CodeDrobe transactional backup, and no listener on port 9335.
+- PowerShell parsing, launcher-flow checks, toggle/dark/light target-resolution tests, restore DryRun, and a temporary-file backup/mutate/restore SHA-256 exercise passed on 2026-07-20.
+- The one-click switch DryRun was exercised against a real active 0.1.3 light trial: both `toggle` and explicit `dark` resolved to `light -> dark`, explicit `light` exited unchanged, and the active pointer plus CodeDrobe backup retained identical SHA-256 hashes before and after testing.
+- Live 0.1.3 apply and campus artwork rendering have been confirmed. The current visual direction is still being refined from user screenshots.
 - A separate current-state baseline copy of `~/.codex/config.toml` was created under the private backup root and verified against SHA-256 `28FED8BDAE28692984D097A6E13590B5FDF3C5983ECD2372691FA284C6EEDECA`.
-- Live apply and visual verification of version 0.1.3 remain pending until the user runs the restart script.
 
 ## Tool boundary
 

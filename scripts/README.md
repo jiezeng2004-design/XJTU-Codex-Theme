@@ -2,6 +2,20 @@
 
 Run these scripts from a PowerShell or CMD window outside Codex because the launcher closes existing Codex processes.
 
+## One-click switch
+
+Double-click the root `switch-codex-theme.cmd` wrapper to toggle the active XJTU theme. It switches `light -> dark` or `dark -> light`; when no XJTU theme is active, it applies `dark`.
+
+An explicit target is also supported:
+
+```powershell
+.\switch-codex-theme.cmd dark
+.\switch-codex-theme.cmd light
+.\scripts\switch-codex-theme.ps1 -Theme toggle -DryRun
+```
+
+When a theme is active, switching first runs the guarded restore to recover the original config, checks that both restore pointers are cleared, and only then starts a fresh guarded apply for the target. Codex restarts during this operation. If the target is already active, the switch exits without changing anything.
+
 ## Apply and restart
 
 ```powershell
