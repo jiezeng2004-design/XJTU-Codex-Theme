@@ -1,6 +1,6 @@
 # XJTU Codex Theme - Safety Trial Ready
 
-Status: ready for a guarded local trial on 2026-07-20.
+Status: ready for a guarded local retry on Codex 26.715.7063.0 as of 2026-07-20.
 
 ## Preserved deliverables
 
@@ -8,8 +8,9 @@ Status: ready for a guarded local trial on 2026-07-20.
 - `assets/backgrounds/xjtu-campus-dark-v1-2560x1440.png`: matching dark campus background.
 - `themes/xjtu-academic-light/`: CodeDrobe source for the light Codex theme.
 - `themes/xjtu-academic-dark/`: CodeDrobe source for the dark Codex theme.
-- `dist/xjtu-academic-light-0.1.0.codedrobe-theme`: packaged light theme.
-- `dist/xjtu-academic-dark-0.1.0.codedrobe-theme`: packaged dark theme.
+- `dist/xjtu-academic-light-0.1.1.codedrobe-theme`: current packaged light theme.
+- `dist/xjtu-academic-dark-0.1.1.codedrobe-theme`: current packaged dark theme.
+- `dist/*-0.1.0.codedrobe-theme`: retained legacy packages; do not use them with Codex 26.715.7063.0.
 
 The source themes use package-optimized JPEG hero assets. The approved PNG originals remain in `assets/backgrounds/`.
 
@@ -53,11 +54,14 @@ The restore script uses CodeDrobe when available, then independently restores th
 
 ## Verified state
 
-- Both packages were created and inspected with `@codedrobe/core` 0.6.1.
+- A guarded live trial of version 0.1.0 reached launch and probe, then failed at apply because the optional `codex-theme-v1` renderer profile required noninteractive chrome that Codex 26.715.7063.0 did not provide. Automatic CodeDrobe restore and the independent SHA-256 config restore both completed successfully.
+- Version 0.1.1 removes that optional renderer profile. The XJTU background and glass styling remain implemented by the themes' own CSS and named `hero` image.
+- Both 0.1.1 packages were created and inspected with `@codedrobe/core` 0.6.1; neither package contains `rendererProfile`.
 - Both packages target the `codex` adapter, use schema version 1, and embed one named `hero` image.
 - PowerShell parsing, dark/light/restore DryRun, and a temporary-file backup/mutate/restore SHA-256 exercise passed on 2026-07-20 without touching the real Codex config.
+- After verification there was no active XJTU snapshot, no unresolved CodeDrobe transactional backup, and no listener on port 9335.
 - A separate current-state baseline copy of `~/.codex/config.toml` was created under the private backup root and verified against SHA-256 `28FED8BDAE28692984D097A6E13590B5FDF3C5983ECD2372691FA284C6EEDECA`.
-- Live renderer and visual verification remain pending until the user runs the restart script.
+- Live apply and visual verification of version 0.1.1 remain pending until the user runs the restart script.
 
 ## Tool boundary
 

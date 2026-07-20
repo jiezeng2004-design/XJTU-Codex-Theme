@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "xjtu-academic-dark",
   "displayName": "XJTU Academic Dark",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "images": {
     "hero": "assets/hero.jpg"
   },
@@ -13,7 +13,6 @@
     "codex": {
       "css": "codex.css",
       "options": {
-        "rendererProfile": "codex-theme-v1",
         "baseTheme": {
           "mode": "dark",
           "accent": "#D2A15B",
