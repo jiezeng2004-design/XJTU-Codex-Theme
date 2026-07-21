@@ -97,6 +97,8 @@ scripts/                   安装、验证与恢复脚本
 
 商业授权方式见 [`COMMERCIAL_LICENSE.md`](COMMERCIAL_LICENSE.md)。第三方许可见 [`engine/THIRD_PARTY_NOTICES.md`](engine/THIRD_PARTY_NOTICES.md)。
 
+作者：`yistart`。商业授权联系邮箱：`jiezeng2004@gmail.com`。
+
 ## 致谢与声明
 
 Inspector 脉冲架构参考了 `okkskin` 0.2.0 的 MIT 授权实现，相关版权和许可全文已保留。本项目及其中的 XJTU 风格素材为非官方创作，不代表 OpenAI 或西安交通大学的认可、授权或官方发布。

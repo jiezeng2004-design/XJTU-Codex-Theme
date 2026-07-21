@@ -10,7 +10,7 @@ A separate written license is required before using the project, its original as
 - bundling with commercial software or hardware;
 - resale, relicensing, or commercial distribution.
 
-To request commercial permission, contact the repository owner through the hosting platform's issue or discussion system. Include:
+To request commercial permission, contact yistart at `jiezeng2004@gmail.com`. Include:
 
 1. who will use the project;
 2. the product or service involved;
@@ -18,6 +18,6 @@ To request commercial permission, contact the repository owner through the hosti
 4. the expected number of users or installations;
 5. whether the XJTU assets or only the generic engine/template will be used.
 
-Do not include passwords, API keys, customer secrets, or other sensitive information in a public issue. If the repository owner publishes a private commercial-contact method, use that method instead.
+Do not include passwords, API keys, customer secrets, or other sensitive information. GitHub Issues or Discussions may be used for non-sensitive questions, but commercial details should be sent by email.
 
 No commercial permission is granted until both parties agree to separate written terms.
