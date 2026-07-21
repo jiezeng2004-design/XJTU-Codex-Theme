@@ -1,0 +1,4 @@
+Add hero-dark.jpg and hero-light.jpg here.
+
+Use only images that you own or are licensed to redistribute.
+Recommended size: 2560x1440 (16:9).

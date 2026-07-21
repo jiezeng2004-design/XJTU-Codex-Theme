@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "custom-theme-light",
+  "name": "Custom Theme Light",
+  "variant": "light",
+  "image": "../../template/unbranded/assets/hero-light.jpg",
+  "colors": {
+    "background": "#F2F5F8",
+    "panel": "#FCFDFE",
+    "accent": "#356A9A",
+    "text": "#243444",
+    "muted": "#647586",
+    "line": "rgba(65,82,99,.18)"
+  },
+  "layout": {
+    "positionX": "68%",
+    "zoom": "116%",
+    "bodyScrimStart": "30%",
+    "bodyScrimEnd": "42%",
+    "mainScrimStart": "14%",
+    "mainScrimEnd": "24%",
+    "sidebarScrimStart": "68%",
+    "sidebarScrimEnd": "82%",
+    "conversationWallpaper": false
+  }
+}

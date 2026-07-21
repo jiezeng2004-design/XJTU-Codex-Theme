@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "custom-theme-dark",
+  "name": "Custom Theme Dark",
+  "variant": "dark",
+  "image": "../../template/unbranded/assets/hero-dark.jpg",
+  "colors": {
+    "background": "#0B1220",
+    "panel": "#111C2E",
+    "accent": "#7CC4FF",
+    "text": "#EAF2FA",
+    "muted": "#A8B6C7",
+    "line": "rgba(166,190,218,.20)"
+  },
+  "layout": {
+    "positionX": "68%",
+    "zoom": "116%",
+    "bodyScrimStart": "34%",
+    "bodyScrimEnd": "46%",
+    "mainScrimStart": "22%",
+    "mainScrimEnd": "34%",
+    "sidebarScrimStart": "76%",
+    "sidebarScrimEnd": "88%",
+    "conversationWallpaper": false
+  }
+}

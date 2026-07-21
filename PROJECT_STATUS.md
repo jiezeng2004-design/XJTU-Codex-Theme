@@ -1,6 +1,6 @@
 # XJTU Codex Theme - Local Hot Engine Ready
 
-Status: the local hot theme engine passed unit, syntax, and no-side-effect DryRun validation on Codex 26.715.7063.0 as of 2026-07-21. The first live Inspector injection remains pending explicit approval.
+Status: hot engine 0.2.1 passed unit, DryRun, live dark-theme apply, renderer health verification, and recovery testing on Codex 26.715.7063.0 as of 2026-07-21.
 
 ## Preserved deliverables
 

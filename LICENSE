@@ -1,0 +1,67 @@
+XJTU CODEX THEME NON-COMMERCIAL SOURCE LICENSE 1.0
+
+Copyright (c) 2026 XJTU Codex Theme Author
+
+1. Permission for Non-Commercial Use
+
+Subject to the terms below, you may view, use, copy, modify, and redistribute
+this software and its included original assets for personal, educational,
+academic, research, evaluation, and other non-commercial purposes.
+
+2. Commercial Use Requires a Separate License
+
+You may not use this software or its included original assets for commercial
+purposes without prior written permission from the copyright holder.
+Commercial use includes, without limitation:
+
+- selling or licensing the software, a derivative, or a theme made from it;
+- including it in a paid product, subscription, service, consultancy, or
+  commercial distribution;
+- using it to provide paid customization, deployment, hosting, or support;
+- using it primarily for the commercial advantage of a business or other
+  for-profit organization.
+
+Commercial licenses are available separately. Contact the repository owner
+through the repository's issue or discussion system before commercial use.
+
+3. Redistribution Conditions
+
+Any permitted redistribution or derivative work must:
+
+- retain this license and all copyright and third-party notices;
+- clearly identify significant modifications;
+- use these same non-commercial terms unless a separate written commercial
+  license has been granted by the copyright holder;
+- not imply endorsement by OpenAI, Codex, Xi'an Jiaotong University, or the
+  original author.
+
+4. Third-Party Components
+
+Third-party components remain subject to their own licenses. Nothing in this
+license restricts rights granted directly by those third-party licenses. See
+engine/THIRD_PARTY_NOTICES.md for applicable notices.
+
+5. Trademarks and Institutional Identity
+
+This license does not grant rights to any trademark, official logo, seal,
+institutional identity, or other protected designation. The project is an
+unofficial work and is not affiliated with or endorsed by OpenAI or Xi'an
+Jiaotong University.
+
+6. No Warranty
+
+THE SOFTWARE AND ASSETS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT. IN NO EVENT
+SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY CLAIM, DAMAGES,
+OR OTHER LIABILITY ARISING FROM THE SOFTWARE, ASSETS, OR THEIR USE.
+
+7. Termination
+
+Your rights under this license terminate automatically if you violate its
+terms. Rights may be restored only with written permission from the copyright
+holder or after the violation is cured and all non-compliant distribution or
+use has stopped.
+
+This is a source-available non-commercial license and is not an OSI-approved
+open-source license.
