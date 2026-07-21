@@ -19,6 +19,14 @@ The first real `preview` or `switch` is a deliberate live operation: it opens th
 
 `enable dark` is optional persistence. It applies the theme now and creates the limited-privilege `XJTU-Codex-Theme` logon task. `disable` removes that task too. Persistent mode has not been enabled during development.
 
+To create the four matching desktop shortcuts (`Switch`, `Dark`, `Light`, and `Disable`), run:
+
+```powershell
+.\scripts\install-desktop-shortcuts.ps1
+```
+
+Use `-Remove` to remove only those four shortcuts. The installer does not apply a theme.
+
 ## Legacy CodeDrobe scripts
 
 The remaining scripts are preserved for the older isolated-profile recovery workflow. They close and restart Codex, so run them from PowerShell or CMD outside Codex.
