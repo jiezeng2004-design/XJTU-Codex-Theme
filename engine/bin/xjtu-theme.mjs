@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { disableTheme, enableTheme, environmentReport, previewTheme, switchTheme } from "../src/runtime.mjs";
+import { disableTheme, enableTheme, environmentReport, previewTheme, switchTheme, verifyTheme } from "../src/runtime.mjs";
 
 const [command, ...rawArgs] = process.argv.slice(2);
 const dryRun = rawArgs.includes("--dry-run");
@@ -18,6 +18,10 @@ async function main() {
     case "status":
       result = await environmentReport();
       break;
+    case "verify":
+      result = await verifyTheme();
+      if (!result.healthy) process.exitCode = 1;
+      break;
     case "preview":
       result = await previewTheme(mode(args[0], "dark"), { dryRun });
       break;
@@ -35,7 +39,7 @@ async function main() {
       result = await disableTheme({ dryRun });
       break;
     default:
-      console.log("Usage: xjtu-theme <doctor|status|preview|switch|enable|disable|restore> [dark|light|toggle] [--dry-run]");
+      console.log("Usage: xjtu-theme <doctor|status|verify|preview|switch|enable|disable|restore> [dark|light|toggle] [--dry-run]");
       process.exitCode = command ? 2 : 0;
       return;
   }

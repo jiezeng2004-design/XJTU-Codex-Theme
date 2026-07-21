@@ -255,3 +255,46 @@ export const RESTORE_EXPRESSION = `(async () => {
   delete globalThis.__XJTU_HOT_ENGINE__;
   return results;
 })()`;
+
+const VERIFY_RENDERER_SCRIPT = `(async () => {
+  const root = document.documentElement;
+  const main = document.querySelector('main.main-surface');
+  const started = performance.now();
+  const frameAdvanced = await Promise.race([
+    new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve(true)))),
+    new Promise((resolve) => setTimeout(() => resolve(false), 750)),
+  ]);
+  const bodyStyle = getComputedStyle(document.body);
+  const mainStyle = main ? getComputedStyle(main) : null;
+  return {
+    installed: root.classList.contains('${ROOT_CLASS}'),
+    mode: root.dataset.xjtuThemeMode || null,
+    themeId: root.dataset.xjtuTheme || null,
+    stylePresent: Boolean(document.getElementById('${STYLE_ID}')),
+    hasMain: Boolean(main),
+    bodyBackgroundPresent: bodyStyle.backgroundImage !== 'none',
+    bodyPointerEvents: bodyStyle.pointerEvents,
+    mainPointerEvents: mainStyle?.pointerEvents || null,
+    frameAdvanced,
+    responseDelayMs: Math.round(performance.now() - started),
+    visibility: document.visibilityState,
+  };
+})()`;
+
+export const VERIFY_EXPRESSION = `(async () => {
+  const { BrowserWindow } = require('electron');
+  const windows = BrowserWindow.getAllWindows().filter((window) => String(window.webContents.getURL() || '').startsWith('app://'));
+  return Promise.all(windows.map(async (window) => {
+    const contents = window.webContents;
+    const url = String(contents.getURL() || '');
+    if (url.includes('initialRoute=%2Favatar-overlay') || url.includes('initialRoute=/avatar-overlay')) {
+      return { skipped: 'avatar-overlay', url };
+    }
+    try {
+      const renderer = await contents.executeJavaScript(${JSON.stringify(VERIFY_RENDERER_SCRIPT)});
+      return { url, renderer };
+    } catch (error) {
+      return { url, error: error.message };
+    }
+  }));
+})()`;

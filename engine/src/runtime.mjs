@@ -2,7 +2,7 @@ import fs from "node:fs";
 import net from "node:net";
 import { codeDrobeState, ENGINE_VERSION, INSPECTOR_PORT, loadTheme, statePath } from "./config.mjs";
 import { findCodexBundle, findCodexMainPid, verifyCodexBundle } from "./codex.mjs";
-import { buildApplyExpression, buildRendererScript, RESTORE_EXPRESSION } from "./inject.mjs";
+import { buildApplyExpression, buildRendererScript, RESTORE_EXPRESSION, VERIFY_EXPRESSION } from "./inject.mjs";
 import { withOperationLock } from "./lock.mjs";
 import { installAgent, taskExists, uninstallAgent } from "./persist.mjs";
 import { inspectorPortOpen, pulse } from "./pulse.mjs";
@@ -212,5 +212,21 @@ export async function disableTheme(options = {}) {
     }
     clearState();
     return { action: "disable", restoredPid: pid, restoreResult, scheduledTask: taskExists(), stateCleared: !fs.existsSync(statePath()) };
+  });
+}
+
+export async function verifyTheme() {
+  return withOperationLock(async () => {
+    const pid = findCodexMainPid();
+    if (!pid) throw new Error("Codex is not running. Open Codex normally, then retry.");
+    const results = await pulse(VERIFY_EXPRESSION);
+    await assertInspectorClosed();
+    const compatible = results.filter((result) => !result?.skipped);
+    const healthy = compatible.length > 0 && compatible.every((result) =>
+      !result.error && result.renderer?.installed && result.renderer?.stylePresent &&
+      result.renderer?.hasMain && result.renderer?.bodyBackgroundPresent &&
+      result.renderer?.bodyPointerEvents !== "none" && result.renderer?.mainPointerEvents !== "none"
+    );
+    return { action: "verify", pid, healthy, results };
   });
 }

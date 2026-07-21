@@ -9,7 +9,7 @@ process.env.XJTU_THEME_STATE_DIR = testStateRoot;
 
 const { loadTheme, PROJECT_ROOT } = await import("../src/config.mjs");
 const { pickWindowsMainPid } = await import("../src/codex.mjs");
-const { FIXED_CSS, buildApplyExpression, buildRendererScript, RESTORE_EXPRESSION } = await import("../src/inject.mjs");
+const { FIXED_CSS, buildApplyExpression, buildRendererScript, RESTORE_EXPRESSION, VERIFY_EXPRESSION } = await import("../src/inject.mjs");
 const { withOperationLock } = await import("../src/lock.mjs");
 const { clearState, readState, resolveTarget, writeState } = await import("../src/state.mjs");
 
@@ -50,6 +50,8 @@ test("renderer payload is local, skips utility windows, and supports cleanup", (
   assert.match(apply, /browser-window-created/);
   assert.match(apply, /dom-ready/);
   assert.match(RESTORE_EXPRESSION, /removeListener/);
+  assert.match(VERIFY_EXPRESSION, /requestAnimationFrame/);
+  assert.match(VERIFY_EXPRESSION, /bodyPointerEvents/);
 });
 
 test("resolves explicit and toggle targets", () => {

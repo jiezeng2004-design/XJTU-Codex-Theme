@@ -6,6 +6,7 @@ This local Windows-only engine applies the XJTU Codex theme to an already-runnin
 
 ```cmd
 xjtu-theme.cmd doctor
+xjtu-theme.cmd verify
 xjtu-theme.cmd preview dark
 xjtu-theme.cmd preview light
 xjtu-theme.cmd switch
@@ -18,6 +19,7 @@ xjtu-theme.cmd disable
 - `enable`: apply now and install the limited-privilege `XJTU-Codex-Theme` logon task for future Codex processes.
 - `disable` / `restore`: remove the task, restore the current renderer, and clear engine state.
 - `doctor` / `status`: read-only environment and state report.
+- `verify`: confirm that the current renderer responds and that the theme style, background, main surface, and pointer events are healthy.
 - `--dry-run`: validate and describe an operation without opening the inspector or changing state.
 
 The engine refuses to apply while the legacy CodeDrobe snapshot, host backup, or port 9335 is active.
