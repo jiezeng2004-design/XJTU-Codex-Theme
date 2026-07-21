@@ -102,6 +102,7 @@ The restore script uses CodeDrobe when available, then independently restores th
 - A separate current-state baseline copy of `~/.codex/config.toml` was created under the private backup root and verified against SHA-256 `28FED8BDAE28692984D097A6E13590B5FDF3C5983ECD2372691FA284C6EEDECA`.
 - Hot engine validation on 2026-07-21: all 7 Node tests passed, PowerShell parsed all scripts, the existing legacy safety tests passed, and `doctor`, `preview dark --dry-run`, `preview light --dry-run`, `switch toggle --dry-run`, `enable dark --dry-run`, and `disable --dry-run` all passed. The DryRun state comparison confirmed no local state file, scheduled task, Inspector port, or CodeDrobe port was created.
 - `doctor` now identifies the installed Store Codex executable and PID through the PowerShell host wrapper. The active baseline remains clear: Inspector port 9229 closed, CodeDrobe port 9335 closed, no CodeDrobe backup/snapshot, no hot-engine state, and no `XJTU-Codex-Theme` scheduled task.
+- Hot engine 0.1.1 corrects a Windows process-selection defect found during the first real shortcut use: the Crashpad handler was mistaken for the Electron main process because it does not include `--type=`. Main-process discovery now excludes both Chromium `--type=*` children and `crashpad-handler`; read-only `doctor` and theme DryRun identify the real Electron main PID before any Inspector pulse.
 
 ## Tool boundary
 

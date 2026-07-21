@@ -19,16 +19,24 @@ if (-not (Test-Path -LiteralPath $Cli -PathType Leaf)) {
 }
 
 $codex = Resolve-XjtuCodexExecutable
-$process = Get-Process -Name "ChatGPT" -ErrorAction SilentlyContinue |
-    Where-Object { $_.Path -eq $codex.Executable } |
+$process = Get-CimInstance Win32_Process -Filter "Name='ChatGPT.exe'" -ErrorAction Stop |
+    Where-Object {
+        $_.ExecutablePath -eq $codex.Executable -and
+        $_.CommandLine -notmatch '(?:^|\s)--type=' -and
+        $_.CommandLine -notmatch 'crashpad-handler'
+    } |
     Select-Object -First 1
+
+if (-not $process) {
+    throw "The Codex Electron main process could not be identified. Open Codex normally, then retry."
+}
 
 $hostInfo = [ordered]@{
     executable = $codex.Executable
     location = Split-Path -Parent (Split-Path -Parent $codex.Executable)
     signatureKind = "Store"
     version = $codex.Version
-    pid = if ($process) { $process.Id } else { $null }
+    pid = [int]$process.ProcessId
 }
 $env:XJTU_THEME_HOST_INFO = $hostInfo | ConvertTo-Json -Compress
 

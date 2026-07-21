@@ -60,6 +60,7 @@ test("resolves explicit and toggle targets", () => {
 
 test("selects only the Windows main process", () => {
   const json = JSON.stringify([
+    { ProcessId: 5, CommandLine: "ChatGPT.exe --monitor-self-annotation=ptype=crashpad-handler" },
     { ProcessId: 10, CommandLine: "ChatGPT.exe --type=renderer" },
     { ProcessId: 20, CommandLine: "C:\\Program Files\\WindowsApps\\ChatGPT.exe" },
   ]);

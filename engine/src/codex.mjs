@@ -46,7 +46,10 @@ export function pickWindowsMainPid(json) {
   if (!Array.isArray(processes)) processes = processes ? [processes] : [];
   for (const processInfo of processes) {
     const commandLine = String(processInfo.CommandLine || "");
-    if (commandLine && !commandLine.includes("--type=")) return Number(processInfo.ProcessId);
+    if (!commandLine) continue;
+    // Electron's Crashpad handler does not use --type=, but is not the Node main process.
+    if (/(?:^|\s)--type=|crashpad-handler/i.test(commandLine)) continue;
+    return Number(processInfo.ProcessId);
   }
   return null;
 }
