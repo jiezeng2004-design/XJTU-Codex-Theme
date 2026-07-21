@@ -10,6 +10,18 @@
 > [!WARNING]
 > 这是非官方实验性项目，不隶属于 OpenAI 或西安交通大学。它依赖 Codex Desktop 的 Electron 内部结构，Codex 更新后可能需要适配。当前已验证版本为 `26.715.7063.0`。
 
+## 效果预览
+
+| XJTU Academic Dark | XJTU Academic Light |
+| --- | --- |
+| ![XJTU Codex dark theme](docs/media/xjtu-codex-dark.png) | ![XJTU Codex light theme](docs/media/xjtu-codex-light.png) |
+
+### 无重启切换演示
+
+![Switch between XJTU Codex light and dark themes without restarting](docs/media/xjtu-codex-theme-demo.gif)
+
+[观看无音轨高清 MP4 演示](https://github.com/jiezeng2004-design/XJTU-Codex-Theme/releases/latest/download/xjtu-codex-theme-demo.mp4)
+
 ## XJTU 成品主题
 
 环境要求：
