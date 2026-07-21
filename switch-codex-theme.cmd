@@ -3,13 +3,5 @@ setlocal
 set "THEME=%~1"
 if "%THEME%"=="" set "THEME=toggle"
 
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\switch-codex-theme.ps1" -Theme "%THEME%"
-set "EXIT_CODE=%ERRORLEVEL%"
-
-if not "%EXIT_CODE%"=="0" (
-  echo.
-  echo XJTU Codex theme switch failed with exit code %EXIT_CODE%.
-  pause
-)
-
-exit /b %EXIT_CODE%
+call "%~dp0xjtu-theme.cmd" switch "%THEME%"
+exit /b %ERRORLEVEL%

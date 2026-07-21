@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "xjtu-academic-light",
+  "name": "XJTU Academic Light",
+  "variant": "light",
+  "image": "../../themes/xjtu-academic-light/assets/hero.jpg",
+  "colors": {
+    "background": "#F3EEE5",
+    "panel": "#FFFDF9",
+    "accent": "#9B4A3C",
+    "text": "#263746",
+    "muted": "#667482",
+    "line": "rgba(83,74,62,.18)"
+  },
+  "layout": {
+    "positionX": "68%",
+    "zoom": "116%",
+    "bodyScrimStart": "30%",
+    "bodyScrimEnd": "42%",
+    "mainScrimStart": "14%",
+    "mainScrimEnd": "24%",
+    "sidebarScrimStart": "68%",
+    "sidebarScrimEnd": "82%",
+    "conversationWallpaper": false
+  }
+}

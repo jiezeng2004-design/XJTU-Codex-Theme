@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "xjtu-academic-dark",
+  "name": "XJTU Academic Dark",
+  "variant": "dark",
+  "image": "../../themes/xjtu-academic-dark/assets/hero.jpg",
+  "colors": {
+    "background": "#071429",
+    "panel": "#0C1F39",
+    "accent": "#D2A15B",
+    "text": "#E7EDF5",
+    "muted": "#A5B2C3",
+    "line": "rgba(167,190,216,.20)"
+  },
+  "layout": {
+    "positionX": "68%",
+    "zoom": "116%",
+    "bodyScrimStart": "34%",
+    "bodyScrimEnd": "46%",
+    "mainScrimStart": "22%",
+    "mainScrimEnd": "34%",
+    "sidebarScrimStart": "76%",
+    "sidebarScrimEnd": "88%",
+    "conversationWallpaper": false
+  }
+}

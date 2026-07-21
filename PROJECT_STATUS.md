@@ -1,6 +1,6 @@
-# XJTU Codex Theme - Safety Trial Ready
+# XJTU Codex Theme - Local Hot Engine Ready
 
-Status: ready for a guarded local retry on Codex 26.715.7063.0 as of 2026-07-20.
+Status: the local hot theme engine passed unit, syntax, and no-side-effect DryRun validation on Codex 26.715.7063.0 as of 2026-07-21. The first live Inspector injection remains pending explicit approval.
 
 ## Preserved deliverables
 
@@ -9,11 +9,31 @@ Status: ready for a guarded local retry on Codex 26.715.7063.0 as of 2026-07-20.
 - `themes/xjtu-academic-light/`: CodeDrobe source for the light Codex theme.
 - `themes/xjtu-academic-dark/`: CodeDrobe source for the dark Codex theme.
 - `switch-codex-theme.cmd`: one-click safe toggle, with optional `dark` or `light` target.
+- `xjtu-theme.cmd`: no-restart local hot-theme command wrapper.
+- `engine/`: local Node implementation, including its dark/light manifests and tests.
 - `dist/xjtu-academic-light-0.1.3.codedrobe-theme`: current packaged light theme.
 - `dist/xjtu-academic-dark-0.1.3.codedrobe-theme`: current packaged dark theme.
 - `dist/*-0.1.0.codedrobe-theme` through `dist/*-0.1.2.codedrobe-theme`: retained historical packages; do not use them for the current trial.
 
 The source themes use package-optimized JPEG hero assets. The approved PNG originals remain in `assets/backgrounds/`.
+
+## Local hot-theme engine
+
+The default switch entry now uses the local hot engine. It applies or toggles the visual theme in the current Codex process without restarting Codex or modifying WindowsApps, `app.asar`, Codex configuration, browser profiles, cookies, or credentials.
+
+```cmd
+xjtu-theme.cmd doctor
+xjtu-theme.cmd preview dark
+xjtu-theme.cmd preview light
+xjtu-theme.cmd switch
+xjtu-theme.cmd disable
+```
+
+`preview` applies a theme once. `switch` toggles light and dark, or accepts an explicit target. `disable` removes the renderer injection from the running Codex process and clears the local hot-engine state. `enable dark` additionally creates the opt-in, limited-privilege `XJTU-Codex-Theme` logon task; it has not been enabled or created during development.
+
+Each live apply briefly opens a loopback-only Node Inspector endpoint on port 9229, verifies its PID matches the selected Codex main process, injects the local renderer payload, then closes the endpoint. The engine refuses to operate when an old CodeDrobe transaction, host backup, or port 9335 is present. It also skips the incompatible `avatar-overlay` utility renderer.
+
+The Store AppX discovery is performed by the PowerShell host wrapper. This avoids the restricted Node child-process context that previously produced a false "OpenAI.Codex was not found" result, without weakening Store-signature or executable-path validation.
 
 ## Safety model
 
@@ -32,6 +52,10 @@ CodeDrobe also creates its own transactional backup. After inspect, one guarded 
 This protects the files and settings touched by the workflow. It cannot guarantee recovery from operating-system failure, disk loss, or unrelated application corruption.
 
 The switch wrapper never overwrites an active snapshot. It restores and verifies the current trial first, then lets the normal guarded launcher create a new snapshot for the target theme. An unresolved CodeDrobe backup without an active XJTU snapshot stops the switch instead of guessing.
+
+## Legacy CodeDrobe trial
+
+The commands below are retained only for recovery and comparison with the previous CodeDrobe design. They restart Codex and use an isolated CodeDrobe profile. They are not used by `xjtu-theme.cmd`.
 
 ## One-command trial
 
@@ -76,6 +100,8 @@ The restore script uses CodeDrobe when available, then independently restores th
 - The one-click switch DryRun was exercised against a real active 0.1.3 light trial: both `toggle` and explicit `dark` resolved to `light -> dark`, explicit `light` exited unchanged, and the active pointer plus CodeDrobe backup retained identical SHA-256 hashes before and after testing.
 - Live 0.1.3 apply and campus artwork rendering have been confirmed. The current visual direction is still being refined from user screenshots.
 - A separate current-state baseline copy of `~/.codex/config.toml` was created under the private backup root and verified against SHA-256 `28FED8BDAE28692984D097A6E13590B5FDF3C5983ECD2372691FA284C6EEDECA`.
+- Hot engine validation on 2026-07-21: all 7 Node tests passed, PowerShell parsed all scripts, the existing legacy safety tests passed, and `doctor`, `preview dark --dry-run`, `preview light --dry-run`, `switch toggle --dry-run`, `enable dark --dry-run`, and `disable --dry-run` all passed. The DryRun state comparison confirmed no local state file, scheduled task, Inspector port, or CodeDrobe port was created.
+- `doctor` now identifies the installed Store Codex executable and PID through the PowerShell host wrapper. The active baseline remains clear: Inspector port 9229 closed, CodeDrobe port 9335 closed, no CodeDrobe backup/snapshot, no hot-engine state, and no `XJTU-Codex-Theme` scheduled task.
 
 ## Tool boundary
 

@@ -1,20 +1,42 @@
 # Local theme scripts
 
-Run these scripts from a PowerShell or CMD window outside Codex because the launcher closes existing Codex processes.
+## Hot switch without restart
+
+The root `xjtu-theme.cmd` wrapper is now the default path for the local hot-theme engine. It operates on the Codex process already running and does not restart it.
+
+```cmd
+xjtu-theme.cmd doctor
+xjtu-theme.cmd preview dark
+xjtu-theme.cmd preview light
+xjtu-theme.cmd switch
+xjtu-theme.cmd switch dark
+xjtu-theme.cmd disable
+```
+
+`preview` applies once; `switch` toggles light/dark; `disable` restores the live renderer to its unthemed appearance and clears hot-engine state. Append `--dry-run` to `preview`, `switch`, `enable`, or `disable` to validate without opening the Inspector or changing live state.
+
+The first real `preview` or `switch` is a deliberate live operation: it opens the current Codex main process' loopback-only Inspector briefly, validates the PID, injects a local payload, then closes the Inspector. Use `doctor` first. Do not run a hot command while a legacy CodeDrobe trial or port 9335 is active; the engine refuses this automatically.
+
+`enable dark` is optional persistence. It applies the theme now and creates the limited-privilege `XJTU-Codex-Theme` logon task. `disable` removes that task too. Persistent mode has not been enabled during development.
+
+## Legacy CodeDrobe scripts
+
+The remaining scripts are preserved for the older isolated-profile recovery workflow. They close and restart Codex, so run them from PowerShell or CMD outside Codex.
 
 ## One-click switch
 
-Double-click the root `switch-codex-theme.cmd` wrapper to toggle the active XJTU theme. It switches `light -> dark` or `dark -> light`; when no XJTU theme is active, it applies `dark`.
+Double-click the root `switch-codex-theme.cmd` wrapper to call the no-restart hot engine. It switches `light -> dark` or `dark -> light`; when no hot theme is active, it applies `dark`.
 
 An explicit target is also supported:
 
 ```powershell
 .\switch-codex-theme.cmd dark
 .\switch-codex-theme.cmd light
-.\scripts\switch-codex-theme.ps1 -Theme toggle -DryRun
+.\xjtu-theme.cmd switch dark
+.\xjtu-theme.cmd switch light
 ```
 
-When a theme is active, switching first runs the guarded restore to recover the original config, checks that both restore pointers are cleared, and only then starts a fresh guarded apply for the target. Codex restarts during this operation. If the target is already active, the switch exits without changing anything.
+The former `scripts\switch-codex-theme.ps1` remains available only for the legacy guarded CodeDrobe workflow. It restores the old isolated-profile trial before applying a new package and restarts Codex.
 
 ## Apply and restart
 
