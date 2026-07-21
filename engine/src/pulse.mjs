@@ -92,26 +92,29 @@ function triggerInspector(pid) {
   process._debugProcess(Number(pid));
 }
 
-async function openOwnedInspector(pid, timeoutMs = 8000) {
+async function openInspector(pid, { allowExisting = false, timeoutMs = 8000 } = {}) {
+  let targets = [];
   if (await inspectorPortOpen()) {
-    const error = new Error(`127.0.0.1:${INSPECTOR_PORT} is already in use. Refusing to attach or close an inspector not opened by this operation.`);
-    error.code = "INSPECTOR_PORT_IN_USE";
-    throw error;
+    if (!allowExisting) {
+      const error = new Error(`127.0.0.1:${INSPECTOR_PORT} is already in use. Refusing to attach or close an inspector not opened by this operation.`);
+      error.code = "INSPECTOR_PORT_IN_USE";
+      throw error;
+    }
+    targets = await inspectorTargets(INSPECTOR_PORT, 600);
+  } else {
+    triggerInspector(pid);
+    const deadline = Date.now() + timeoutMs;
+    while (Date.now() < deadline) {
+      try {
+        targets = await inspectorTargets(INSPECTOR_PORT, 600);
+        if (targets.some((target) => target.webSocketDebuggerUrl)) break;
+      } catch { /* target is still opening */ }
+      await delay(180);
+    }
   }
 
-  triggerInspector(pid);
-  const deadline = Date.now() + timeoutMs;
-  let targets = [];
-  while (Date.now() < deadline) {
-    try {
-      targets = await inspectorTargets(INSPECTOR_PORT, 600);
-      if (targets.some((target) => target.webSocketDebuggerUrl)) break;
-    } catch { /* target is still opening */ }
-    await delay(180);
-  }
   const target = targets.find((item) => item.webSocketDebuggerUrl);
   if (!target) throw new Error(`Codex inspector did not open on 127.0.0.1:${INSPECTOR_PORT} within ${timeoutMs}ms.`);
-
   const session = await new CdpSession(target, timeoutMs).open();
   const attachedPid = Number(await session.evaluate("process.pid", false));
   if (attachedPid !== Number(pid)) {
@@ -123,7 +126,7 @@ async function openOwnedInspector(pid, timeoutMs = 8000) {
   return session;
 }
 
-async function pulseOnce(expression, timeoutMs = 10000) {
+async function pulseOnce(expression, { allowExisting = false, timeoutMs = 10000 } = {}) {
   const pid = findCodexMainPid();
   if (!pid) {
     const error = new Error("Codex is not running. Open Codex normally before applying a hot theme.");
@@ -131,7 +134,7 @@ async function pulseOnce(expression, timeoutMs = 10000) {
     throw error;
   }
 
-  const session = await openOwnedInspector(pid, Math.min(timeoutMs, 8000));
+  const session = await openInspector(pid, { allowExisting, timeoutMs: Math.min(timeoutMs, 8000) });
   try {
     return await session.evaluate(expression, true);
   } finally {
@@ -145,10 +148,10 @@ async function pulseOnce(expression, timeoutMs = 10000) {
   }
 }
 
-export async function pulse(expression, { timeoutMs = 10000 } = {}) {
+export async function pulse(expression, { allowExisting = false, timeoutMs = 10000 } = {}) {
   let lastError;
   for (let attempt = 1; attempt <= 3; attempt += 1) {
-    try { return await pulseOnce(expression, timeoutMs); }
+    try { return await pulseOnce(expression, { allowExisting, timeoutMs }); }
     catch (error) {
       lastError = error;
       if (["CODEX_NOT_RUNNING", "INSPECTOR_PORT_IN_USE", "INSPECTOR_PID_MISMATCH", "INSPECTOR_UNAVAILABLE"].includes(error.code)) throw error;

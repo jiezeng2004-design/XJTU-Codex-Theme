@@ -27,13 +27,13 @@ test("loads both local themes and keeps images inside the project", () => {
   }
 });
 
-test("wallpaper CSS uses shared fixed coordinates without full-panel blur", () => {
+test("wallpaper CSS uses one fixed body layer without renderer observers", () => {
   assert.match(FIXED_CSS, /html\.xjtu-hot-theme body/);
   assert.match(FIXED_CSS, /main\.main-surface/);
   assert.match(FIXED_CSS, /aside\.app-shell-left-panel/);
-  assert.ok((FIXED_CSS.match(/background-attachment: fixed/g) || []).length >= 3);
+  assert.equal((FIXED_CSS.match(/background-attachment: fixed/g) || []).length, 1);
   assert.doesNotMatch(FIXED_CSS, /backdrop-filter:\s*blur/);
-  assert.match(FIXED_CSS, /main\.main-surface:has\(\[data-turn-key\]\)/);
+  assert.doesNotMatch(FIXED_CSS, /main\.main-surface:has\(/);
 });
 
 test("renderer payload is local, skips utility windows, and supports cleanup", () => {
@@ -44,6 +44,8 @@ test("renderer payload is local, skips utility windows, and supports cleanup", (
   assert.match(renderer, /URL\.revokeObjectURL/);
   assert.match(renderer, /xjtu-academic-dark/);
   assert.doesNotMatch(renderer, /https?:\/\//);
+  assert.doesNotMatch(renderer, /MutationObserver/);
+  assert.doesNotMatch(renderer, /setInterval\(ensure/);
   const apply = buildApplyExpression(renderer);
   assert.match(apply, /browser-window-created/);
   assert.match(apply, /dom-ready/);

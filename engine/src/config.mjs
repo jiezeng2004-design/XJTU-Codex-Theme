@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 export const ENGINE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 export const PROJECT_ROOT = path.resolve(ENGINE_ROOT, "..");
-export const ENGINE_VERSION = "0.1.1";
+export const ENGINE_VERSION = "0.2.0";
 export const TASK_NAME = "XJTU-Codex-Theme";
 export const INSPECTOR_PORT = 9229;
 

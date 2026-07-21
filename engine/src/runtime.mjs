@@ -202,7 +202,7 @@ export async function disableTheme(options = {}) {
     let restoreResult = null;
     if (pid) {
       try {
-        restoreResult = await pulse(RESTORE_EXPRESSION);
+        restoreResult = await pulse(RESTORE_EXPRESSION, { allowExisting: true });
         await assertInspectorClosed();
       } catch (error) {
         const previous = readState() || {};

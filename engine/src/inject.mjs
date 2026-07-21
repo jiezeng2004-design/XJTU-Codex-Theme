@@ -7,20 +7,17 @@ export const FIXED_CSS = `
 html.${ROOT_CLASS} {
   --color-text-foreground: var(--xjtu-text) !important;
   --color-text-foreground-secondary: var(--xjtu-muted) !important;
-  --color-text-foreground-tertiary: color-mix(in srgb, var(--xjtu-muted) 72%, transparent) !important;
   --color-icon-primary: var(--xjtu-text) !important;
   --color-icon-secondary: var(--xjtu-muted) !important;
-  --color-icon-tertiary: color-mix(in srgb, var(--xjtu-muted) 70%, transparent) !important;
   --color-icon-accent: var(--xjtu-accent) !important;
   --color-text-accent: var(--xjtu-accent) !important;
   --color-text-link-foreground: var(--xjtu-accent) !important;
   --color-border: var(--xjtu-line) !important;
-  --color-border-light: color-mix(in srgb, var(--xjtu-line) 60%, transparent) !important;
   --color-border-heavy: var(--xjtu-line) !important;
   --color-border-focus: var(--xjtu-accent) !important;
-  --color-background-panel: var(--xjtu-panel) !important;
-  --color-background-surface: color-mix(in srgb, var(--xjtu-panel) 88%, transparent) !important;
-  --color-background-surface-under: color-mix(in srgb, var(--xjtu-panel) 76%, var(--xjtu-bg)) !important;
+  --color-background-panel: color-mix(in srgb, var(--xjtu-panel) 94%, transparent) !important;
+  --color-background-surface: color-mix(in srgb, var(--xjtu-panel) 94%, transparent) !important;
+  --color-background-surface-under: var(--xjtu-bg) !important;
   --color-background-control: var(--xjtu-panel) !important;
   --color-background-control-opaque: var(--xjtu-panel) !important;
   --color-background-elevated-primary: var(--xjtu-panel) !important;
@@ -37,9 +34,9 @@ html.${ROOT_CLASS} {
   --codex-base-accent: var(--xjtu-accent) !important;
   --codex-base-ink: var(--xjtu-text) !important;
   --codex-base-surface: var(--xjtu-panel) !important;
-  --color-token-bg-primary: transparent !important;
-  --color-token-main-surface-primary: transparent !important;
-  --color-token-side-bar-background: transparent !important;
+  --color-token-bg-primary: var(--xjtu-bg) !important;
+  --color-token-main-surface-primary: color-mix(in srgb, var(--xjtu-bg) var(--xjtu-main-a), transparent) !important;
+  --color-token-side-bar-background: color-mix(in srgb, var(--xjtu-bg) var(--xjtu-sidebar-a), transparent) !important;
   --color-token-foreground: var(--xjtu-text) !important;
   --color-token-text-primary: var(--xjtu-text) !important;
   --color-token-text-secondary: var(--xjtu-muted) !important;
@@ -62,33 +59,16 @@ html.${ROOT_CLASS} body {
 }
 
 html.${ROOT_CLASS} main.main-surface {
-  background-color: transparent !important;
-  background-image:
-    linear-gradient(color-mix(in srgb, var(--xjtu-bg) var(--xjtu-main-a), transparent), color-mix(in srgb, var(--xjtu-bg) var(--xjtu-main-b), transparent)),
-    var(--xjtu-art) !important;
-  background-position: center, var(--xjtu-position-x) center !important;
-  background-size: cover, auto var(--xjtu-zoom) !important;
-  background-repeat: no-repeat !important;
-  background-attachment: fixed !important;
+  background: color-mix(in srgb, var(--xjtu-bg) var(--xjtu-main-a), transparent) !important;
   border: 0 !important;
   border-radius: 0 !important;
-  box-shadow: inset 1px 0 color-mix(in srgb, var(--xjtu-line) 55%, transparent) !important;
-  backdrop-filter: none !important;
+  box-shadow: inset 1px 0 var(--xjtu-line) !important;
 }
 
 html.${ROOT_CLASS} aside.app-shell-left-panel {
-  background-color: var(--xjtu-bg) !important;
-  background-image:
-    linear-gradient(color-mix(in srgb, var(--xjtu-bg) var(--xjtu-sidebar-a), transparent), color-mix(in srgb, var(--xjtu-bg) var(--xjtu-sidebar-b), transparent)),
-    var(--xjtu-art) !important;
-  background-position: center, var(--xjtu-position-x) center !important;
-  background-size: cover, auto var(--xjtu-zoom) !important;
-  background-repeat: no-repeat !important;
-  background-attachment: fixed !important;
-  border-right: 1px solid color-mix(in srgb, var(--xjtu-line) 55%, transparent) !important;
+  background: color-mix(in srgb, var(--xjtu-bg) var(--xjtu-sidebar-a), transparent) !important;
+  border-right: 1px solid var(--xjtu-line) !important;
   color: var(--xjtu-text) !important;
-  text-shadow: 0 1px 3px color-mix(in srgb, var(--xjtu-bg) 76%, transparent);
-  backdrop-filter: none !important;
 }
 
 html.${ROOT_CLASS} aside.app-shell-left-panel nav,
@@ -105,16 +85,14 @@ html.${ROOT_CLASS} aside.app-shell-left-panel :is([aria-current="page"], [aria-s
 
 html.${ROOT_CLASS} main.main-surface > header,
 html.${ROOT_CLASS} header.app-header-tint {
-  background: color-mix(in srgb, var(--xjtu-panel) 42%, transparent) !important;
-  border-bottom: 1px solid color-mix(in srgb, var(--xjtu-line) 60%, transparent) !important;
-  backdrop-filter: none !important;
+  background: color-mix(in srgb, var(--xjtu-panel) 72%, transparent) !important;
+  border-bottom: 1px solid var(--xjtu-line) !important;
 }
 
 html.${ROOT_CLASS} .group\/home-suggestions > * {
   background: color-mix(in srgb, var(--xjtu-panel) 92%, transparent) !important;
   border: 1px solid var(--xjtu-line) !important;
   box-shadow: 0 12px 28px color-mix(in srgb, var(--xjtu-bg) 36%, transparent) !important;
-  backdrop-filter: none !important;
 }
 
 html.${ROOT_CLASS} .composer-surface-chrome {
@@ -122,15 +100,6 @@ html.${ROOT_CLASS} .composer-surface-chrome {
   border: 1px solid var(--xjtu-line) !important;
   color: var(--xjtu-text) !important;
   box-shadow: 0 16px 38px color-mix(in srgb, var(--xjtu-bg) 34%, transparent) !important;
-  backdrop-filter: none !important;
-}
-
-html.${ROOT_CLASS}:not(.xjtu-conversation-wallpaper) main.main-surface:has([data-turn-key]) {
-  background: var(--xjtu-bg) !important;
-}
-
-html.${ROOT_CLASS} :is(article, [data-message-author-role], textarea, .ProseMirror, [contenteditable="true"]) {
-  color: var(--xjtu-text) !important;
 }
 
 html.${ROOT_CLASS} :is(pre, table, blockquote) {
@@ -139,21 +108,6 @@ html.${ROOT_CLASS} :is(pre, table, blockquote) {
 }
 
 html.${ROOT_CLASS} ::selection { background: color-mix(in srgb, var(--xjtu-accent) 32%, transparent); }
-html.${ROOT_CLASS} { scrollbar-color: color-mix(in srgb, var(--xjtu-text) 28%, transparent) transparent; }
-
-#xjtu-hot-theme-transition {
-  position: fixed;
-  inset: 0;
-  z-index: 2147483647;
-  pointer-events: none;
-  background: var(--xjtu-bg);
-  opacity: 1;
-  transition: opacity 180ms ease-out;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #xjtu-hot-theme-transition { transition-duration: 1ms; }
-}
 `.trim();
 
 const VARIABLE_NAMES = [
@@ -227,19 +181,8 @@ export function buildRendererScript(theme) {
       if (style.textContent !== P.css) style.textContent = P.css;
     };
     ensure();
-    const transition = document.createElement('div');
-    transition.id = 'xjtu-hot-theme-transition';
-    document.body?.appendChild(transition);
-    requestAnimationFrame(() => requestAnimationFrame(() => { transition.style.opacity = '0'; }));
-    setTimeout(() => transition.remove(), 260);
-    const observer = new MutationObserver(() => ensure());
-    observer.observe(root, { childList: true, subtree: true });
-    const interval = setInterval(ensure, 5000);
     const cleanup = () => {
-      observer.disconnect();
-      clearInterval(interval);
       document.getElementById(P.styleId)?.remove();
-      document.getElementById('xjtu-hot-theme-transition')?.remove();
       root.classList.remove(P.className, 'xjtu-conversation-wallpaper');
       delete root.dataset.xjtuTheme;
       delete root.dataset.xjtuThemeMode;
@@ -285,7 +228,6 @@ export function buildApplyExpression(rendererScript) {
 const RESTORE_RENDERER_SCRIPT = `(() => {
   if (window.__XJTU_HOT_THEME__?.cleanup) return window.__XJTU_HOT_THEME__.cleanup();
   document.getElementById('${STYLE_ID}')?.remove();
-  document.getElementById('xjtu-hot-theme-transition')?.remove();
   const root = document.documentElement;
   root.classList.remove('${ROOT_CLASS}', 'xjtu-conversation-wallpaper');
   delete root.dataset.xjtuTheme;
