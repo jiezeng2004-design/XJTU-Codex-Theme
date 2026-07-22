@@ -10,6 +10,8 @@
 > [!WARNING]
 > 这是非官方实验性项目，不隶属于 OpenAI 或西安交通大学。它依赖 Codex Desktop 的 Electron 内部结构，Codex 更新后可能需要适配。当前已验证版本为 `26.715.7063.0`。
 
+精确兼容状态、Codex 更新后的检查步骤和反馈要求见 [`docs/COMPATIBILITY.md`](docs/COMPATIBILITY.md)。
+
 ## 效果预览
 
 | XJTU Academic Dark | XJTU Academic Light |
