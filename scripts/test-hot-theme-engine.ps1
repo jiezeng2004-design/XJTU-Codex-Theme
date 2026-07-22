@@ -1,5 +1,7 @@
 [CmdletBinding()]
-param()
+param(
+    [switch]$Offline
+)
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
@@ -45,18 +47,45 @@ try {
     Pop-Location
 }
 
-foreach ($arguments in @(
-    @("doctor"),
-    @("status"),
-    @("preview", "dark", "--dry-run"),
-    @("preview", "light", "--dry-run"),
-    @("switch", "toggle", "--dry-run"),
-    @("enable", "dark", "--dry-run"),
-    @("disable", "--dry-run")
-)) {
-    Write-Host "[DryRun] $($arguments -join ' ')" -ForegroundColor Cyan
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $HostScript @arguments
-    if ($LASTEXITCODE -ne 0) { throw "Hot theme command failed: $($arguments -join ' ')" }
+$originalHostInfo = $env:XJTU_THEME_HOST_INFO
+$originalStateDir = $env:XJTU_THEME_STATE_DIR
+$offlineStateDir = Join-Path $env:TEMP ("XjtuThemeOffline-{0}" -f $PID)
+try {
+    if ($Offline) {
+        $testExecutable = (Get-Command powershell.exe -ErrorAction Stop).Source
+        $env:XJTU_THEME_HOST_INFO = [ordered]@{
+            executable = $testExecutable
+            location = Split-Path -Parent $testExecutable
+            signatureKind = "Store"
+            version = "ci-offline"
+            pid = $PID
+        } | ConvertTo-Json -Compress
+        $env:XJTU_THEME_STATE_DIR = $offlineStateDir
+    }
+
+    foreach ($arguments in @(
+        @("doctor"),
+        @("status"),
+        @("preview", "dark", "--dry-run"),
+        @("preview", "light", "--dry-run"),
+        @("switch", "toggle", "--dry-run"),
+        @("enable", "dark", "--dry-run"),
+        @("disable", "--dry-run")
+    )) {
+        Write-Host "[DryRun] $($arguments -join ' ')" -ForegroundColor Cyan
+        if ($Offline) {
+            & node.exe $Cli @arguments
+        } else {
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $HostScript @arguments
+        }
+        if ($LASTEXITCODE -ne 0) { throw "Hot theme command failed: $($arguments -join ' ')" }
+    }
+} finally {
+    $env:XJTU_THEME_HOST_INFO = $originalHostInfo
+    $env:XJTU_THEME_STATE_DIR = $originalStateDir
+    if (Test-Path -LiteralPath $offlineStateDir) {
+        Remove-Item -LiteralPath $offlineStateDir -Recurse -Force
+    }
 }
 
 $after = Get-LiveState

@@ -1,0 +1,78 @@
+name: Codex update compatibility report
+description: Report a theme failure or compatibility result after Codex Desktop updates.
+title: "[Compatibility] Codex <version> on Windows <version>"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing XJTU Codex Theme. Do not paste tokens, cookies, account data, full Codex logs, or other credentials.
+
+  - type: input
+    id: theme_version
+    attributes:
+      label: XJTU Codex Theme version
+      placeholder: v0.2.1
+    validations:
+      required: true
+
+  - type: input
+    id: codex_version
+    attributes:
+      label: Codex Desktop version
+      description: Find the Microsoft Store package version; do not include account information.
+      placeholder: 26.715.7063.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: windows_version
+    attributes:
+      label: Windows version
+      options:
+        - Windows 11 x64
+        - Windows 10 x64
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: result
+    attributes:
+      label: Result
+      options:
+        - Works as expected
+        - Theme does not apply
+        - Theme applies but verify fails
+        - Disable or recovery fails
+        - Visual or interaction regression
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Commands and reproduction steps
+      description: Include the exact doctor, preview, switch, verify, or disable command used.
+      placeholder: |
+        1. xjtu-theme.cmd doctor
+        2. xjtu-theme.cmd preview dark
+        3. xjtu-theme.cmd verify
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Redacted output
+      description: Paste only the relevant error. Remove local usernames, paths, account details, and credentials.
+      render: text
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety checks
+      options:
+        - label: I removed tokens, cookies, account data, credentials, and unrelated private paths.
+          required: true
+        - label: I tested disable or recovery if the theme partially applied.
+          required: false
