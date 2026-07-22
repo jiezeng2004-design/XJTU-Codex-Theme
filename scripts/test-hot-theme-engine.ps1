@@ -41,7 +41,7 @@ $before = Get-LiveState
 
 Push-Location $EngineRoot
 try {
-    & node.exe --test --test-isolation=none .\tests\engine.test.mjs
+    & node.exe .\tests\engine.test.mjs
     if ($LASTEXITCODE -ne 0) { throw "Node unit tests failed: $LASTEXITCODE" }
 } finally {
     Pop-Location
