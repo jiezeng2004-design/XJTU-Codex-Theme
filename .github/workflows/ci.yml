@@ -37,6 +37,10 @@ jobs:
             [void][scriptblock]::Create((Get-Content -LiteralPath $_.FullName -Raw))
           }
 
+      - name: Test Codex Skin Maker safety gates
+        shell: powershell
+        run: .\scripts\test-skin-maker-safety.ps1
+
       - name: Run engine unit tests
         run: npm.cmd test --prefix engine
 

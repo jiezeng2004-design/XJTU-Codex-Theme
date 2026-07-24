@@ -21,13 +21,13 @@ description: Create or revise a safe custom skin for Microsoft Store Codex Deskt
 
 1. 优先使用当前工作区中同时包含 `engine/`、`template/unbranded/` 和 `xjtu-theme.cmd` 的 XJTU Codex Theme 仓库。
 2. 如果当前工作区不是该仓库，先检查是否已有用户指定的仓库路径。
-3. 如果仍未找到，向用户说明将下载源代码公开的主题工作区，并在正常命令审批流程下运行：
+3. 如果仍未找到，向用户说明将从官方仓库下载固定到已验证 `v0.2.1` 提交的主题工作区，并在正常命令审批流程下运行：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\bootstrap-workspace.ps1
 ```
 
-4. 不得静默下载、覆盖已有目录或删除用户文件。
+4. 不得静默下载、使用自定义远程源、跟随可变分支、覆盖已有目录或删除用户文件。
 5. 进入仓库后先读取 `references/user-flow.md`、`references/theme-guidelines.md` 和 `references/compatibility-and-safety.md`。
 
 ## 必须遵循的流程
@@ -40,6 +40,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\bootstrap-workspac
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\skills\codex-skin-maker\scripts\check-environment.ps1 -RepositoryRoot .
 ```
+
+- 只有仓库贡献者在用户明确选择的官方 Git 开发分支中验收时，才可以先核对 `origin` 和干净工作区，再显式追加 `-AllowDevelopmentWorkspace`。普通换肤不得使用该开关。
 
 - 环境必须是 Windows 10/11 x64、Microsoft Store 版 Codex Desktop、Node.js 22 或更新版本。
 - `doctor` 失败、Codex 进程无法确认、存在 CodeDrobe 冲突或 Inspector 归属不明时，不得继续真实预览。

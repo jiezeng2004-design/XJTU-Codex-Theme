@@ -66,7 +66,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\install-desktop-shortcuts.ps1
 
 [`codex-skin-maker`](skills/codex-skin-maker/SKILL.md) 面向不熟悉 Git、Node.js、主题 JSON 或 Inspector 的普通用户。用户提供一张或两张自己拥有使用权的图片后，Skill 会：
 
-1. 检查 Windows、Node.js、Microsoft Store Codex 和版本兼容性；
+1. 检查 Windows、Node.js、Microsoft Store Codex、固定来源工作区和版本兼容性；
 2. 从无品牌模板生成浅色和深色皮肤；
 3. 运行主题校验、资源检查、单元测试、安全测试和离线 Dry Run；
 4. 展示简明结果并等待用户明确确认；
@@ -88,6 +88,8 @@ https://github.com/jiezeng2004-design/XJTU-Codex-Theme/tree/main/skills/codex-sk
 ```
 
 完整的普通用户教程见 [`docs/CODEX_SKIN_MAKER.md`](docs/CODEX_SKIN_MAKER.md)。
+
+自动引导默认从官方仓库的已验证 `v0.2.1` 提交准备工作区，不跟随可变分支，也不接受自定义远程源。
 
 ## 使用自己的图片
 
