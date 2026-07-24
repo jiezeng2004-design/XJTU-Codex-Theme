@@ -24,13 +24,13 @@ jobs:
           mkdir -p out
           (
             cd skills/codex-skin-maker
-            zip -r ../../out/codex-skin-maker-redskill.zip . \
+            zip -r ../../out/codex-skin-maker-redskill.zip \
+              SKILL.md LICENSE.txt agents references scripts \
               -x '*.DS_Store' '__MACOSX/*' '*.pyc' '*/__pycache__/*'
           )
-          unzip -l out/codex-skin-maker-redskill.zip
-          first_entry="$(unzip -Z1 out/codex-skin-maker-redskill.zip | head -n 1)"
-          test "$first_entry" = "SKILL.md"
+          unzip -t out/codex-skin-maker-redskill.zip
           unzip -Z1 out/codex-skin-maker-redskill.zip | grep -Fx 'SKILL.md'
+          test "$(unzip -Z1 out/codex-skin-maker-redskill.zip | grep -c '^SKILL.md$')" -eq 1
           sha256sum out/codex-skin-maker-redskill.zip > out/SHA256SUMS.txt
 
       - name: Upload package
