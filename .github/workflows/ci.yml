@@ -30,6 +30,11 @@ jobs:
       - name: Validate Skill packages
         run: node .\scripts\check-skill-pack.mjs
 
+      - name: Validate immutable Skin Maker workspace release
+        run: node .\scripts\check-skin-maker-release.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+
       - name: Parse Skill PowerShell scripts
         shell: powershell
         run: |

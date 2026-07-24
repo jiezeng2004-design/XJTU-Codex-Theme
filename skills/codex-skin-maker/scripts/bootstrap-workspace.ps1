@@ -9,8 +9,9 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 $TrustedRepository = "https://github.com/jiezeng2004-design/XJTU-Codex-Theme.git"
-$TrustedTag = "v0.2.1"
-$TrustedRevision = "18404b64791bf7e640e91597df17c1fe287399ac"
+$TrustedTag = "v0.3.0-rc.1"
+$TrustedRevision = "87a90403453bc2a469423b005cc8d9c761aba307"
+$LegacyRevision = "18404b64791bf7e640e91597df17c1fe287399ac"
 
 function Test-ThemeWorkspace {
     param([Parameter(Mandatory)][string]$Path)
@@ -61,43 +62,113 @@ function Assert-PinnedRevision {
     }
 }
 
-function Test-TrustedWorkspace {
+function Get-WorkspaceSource {
     param([Parameter(Mandatory)][string]$Path)
 
     $receiptPath = Join-Path $Path ".codex-skin-maker-source.json"
     if (Test-Path -LiteralPath $receiptPath -PathType Leaf) {
         try {
             $receipt = Get-Content -LiteralPath $receiptPath -Raw -Encoding UTF8 | ConvertFrom-Json
-            return ([string]::Equals([string]$receipt.revision, $TrustedRevision, [System.StringComparison]::OrdinalIgnoreCase))
+            return [pscustomobject]@{
+                repository = [string]$receipt.repository
+                tag = [string]$receipt.tag
+                revision = [string]$receipt.revision
+                method = "receipt"
+            }
         } catch {
-            return $false
+            return $null
         }
     }
 
     $git = Get-Command git.exe -ErrorAction SilentlyContinue
-    if (-not $git -or -not (Test-Path -LiteralPath (Join-Path $Path ".git"))) { return $false }
+    if (-not $git -or -not (Test-Path -LiteralPath (Join-Path $Path ".git"))) { return $null }
     $remoteOutput = @(& $git.Source -C $Path remote get-url origin 2>$null)
     $remoteExitCode = $LASTEXITCODE
     $revisionOutput = @(& $git.Source -C $Path rev-parse HEAD 2>$null)
     $revisionExitCode = $LASTEXITCODE
-    if ($remoteExitCode -ne 0 -or $revisionExitCode -ne 0) { return $false }
-    $remote = $remoteOutput | Select-Object -First 1
-    $revision = $revisionOutput | Select-Object -First 1
+    if ($remoteExitCode -ne 0 -or $revisionExitCode -ne 0) { return $null }
+    return [pscustomobject]@{
+        repository = ([string]($remoteOutput | Select-Object -First 1)).Trim()
+        tag = ""
+        revision = ([string]($revisionOutput | Select-Object -First 1)).Trim()
+        method = "git"
+    }
+}
+
+function Test-TrustedWorkspace {
+    param([Parameter(Mandatory)][string]$Path)
+
+    $source = Get-WorkspaceSource -Path $Path
+    if (-not $source) { return $false }
     return (
-        [string]::Equals(([string]$remote).Trim().TrimEnd("/"), $TrustedRepository.TrimEnd("/"), [System.StringComparison]::OrdinalIgnoreCase) -and
-        [string]::Equals(([string]$revision).Trim(), $TrustedRevision, [System.StringComparison]::OrdinalIgnoreCase)
+        [string]::Equals($source.repository.Trim().TrimEnd("/"), $TrustedRepository.TrimEnd("/"), [System.StringComparison]::OrdinalIgnoreCase) -and
+        [string]::Equals($source.revision.Trim(), $TrustedRevision, [System.StringComparison]::OrdinalIgnoreCase) -and
+        ($source.method -eq "git" -or [string]::Equals($source.tag.Trim(), $TrustedTag, [System.StringComparison]::OrdinalIgnoreCase))
     )
 }
 
 function Write-SourceReceipt {
-    param([Parameter(Mandatory)][string]$Path)
+    param(
+        [Parameter(Mandatory)][string]$Path,
+        [Parameter(Mandatory)][ValidateSet("git", "https-archive")][string]$Source
+    )
 
     [ordered]@{
         repository = $TrustedRepository
         tag = $TrustedTag
         revision = $TrustedRevision
-        source = "https-archive"
+        source = $Source
     } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $Path ".codex-skin-maker-source.json") -Encoding UTF8
+}
+
+function Save-PinnedArchive {
+    param(
+        [Parameter(Mandatory)][string]$Uri,
+        [Parameter(Mandatory)][string]$DestinationPath
+    )
+
+    $node = Get-Command node.exe -ErrorAction SilentlyContinue
+    if ($node) {
+        $nodeScript = @'
+const fs = require("node:fs");
+const [url, output] = process.argv.slice(1);
+fetch(url, { signal: AbortSignal.timeout(20000) }).then((response) => {
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.arrayBuffer();
+}).then((body) => fs.writeFileSync(output, Buffer.from(body))).catch(() => process.exit(1));
+'@
+        $previousErrorActionPreference = $ErrorActionPreference
+        try {
+            $ErrorActionPreference = "Continue"
+            & $node.Source -e $nodeScript $Uri $DestinationPath 2>$null
+            $nodeExitCode = $LASTEXITCODE
+        } finally {
+            $ErrorActionPreference = $previousErrorActionPreference
+        }
+        if ($nodeExitCode -eq 0 -and (Test-Path -LiteralPath $DestinationPath -PathType Leaf)) {
+            return
+        }
+    }
+
+    $gh = Get-Command gh.exe -ErrorAction SilentlyContinue
+    if (-not $gh) {
+        throw "Pinned archive download failed using Node.js; GitHub CLI is unavailable as a final fallback."
+    }
+
+    $errorPath = "$DestinationPath.error"
+    try {
+        $process = Start-Process -FilePath $gh.Source -ArgumentList @(
+            "api",
+            "repos/jiezeng2004-design/XJTU-Codex-Theme/zipball/$TrustedRevision"
+        ) -RedirectStandardOutput $DestinationPath -RedirectStandardError $errorPath -NoNewWindow -Wait -PassThru
+    } finally {
+        if (Test-Path -LiteralPath $errorPath) {
+            Remove-Item -LiteralPath $errorPath -Force -ErrorAction SilentlyContinue
+        }
+    }
+    if ($process.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $DestinationPath -PathType Leaf)) {
+        throw "Pinned archive download failed using the approved HTTPS fallbacks."
+    }
 }
 
 if ($env:OS -ne "Windows_NT") {
@@ -116,6 +187,10 @@ if (Test-Path -LiteralPath $Destination) {
         }
     } else {
         if (-not (Test-TrustedWorkspace -Path $Destination)) {
+            $existingSource = Get-WorkspaceSource -Path $Destination
+            if ($existingSource -and [string]::Equals($existingSource.revision, $LegacyRevision, [System.StringComparison]::OrdinalIgnoreCase)) {
+                throw "Destination is an older v0.2.1 workspace and is not trusted for $TrustedTag. Choose a new empty directory; the existing workspace will not be overwritten or deleted."
+            }
             throw "Destination looks like a theme workspace, but its source could not be verified. Choose a new directory."
         }
         if ($Update) {
@@ -137,7 +212,7 @@ if ($gitCommand) {
     $previousErrorActionPreference = $ErrorActionPreference
     try {
         $ErrorActionPreference = "Continue"
-        & $gitCommand.Source clone --depth 1 --branch $TrustedTag -- $TrustedRepository $Destination 2>&1 | Out-Null
+        & $gitCommand.Source -c core.autocrlf=false clone --depth 1 --branch $TrustedTag -- $TrustedRepository $Destination 2>&1 | Out-Null
         $gitExitCode = $LASTEXITCODE
     } finally {
         $ErrorActionPreference = $previousErrorActionPreference
@@ -151,6 +226,7 @@ if ($gitCommand) {
     if (-not (Test-ThemeWorkspace -Path $Destination)) {
         throw "Downloaded repository does not contain the expected theme workspace structure."
     }
+    Write-SourceReceipt -Path $Destination -Source "git"
 
     Write-Result -Status "created" -Path $Destination -Method "git"
     exit 0
@@ -159,12 +235,12 @@ if ($gitCommand) {
 $tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("CodexSkinMaker-{0}" -f [Guid]::NewGuid().ToString("N"))
 $archive = Join-Path $tempRoot "source.zip"
 $extract = Join-Path $tempRoot "extract"
-$archiveUrl = "https://github.com/jiezeng2004-design/XJTU-Codex-Theme/archive/$TrustedRevision.zip"
+$archiveUrl = "https://codeload.github.com/jiezeng2004-design/XJTU-Codex-Theme/zip/$TrustedRevision"
 
 try {
     New-Item -ItemType Directory -Path $tempRoot -Force | Out-Null
     [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
-    Invoke-WebRequest -Uri $archiveUrl -OutFile $archive -UseBasicParsing
+    Save-PinnedArchive -Uri $archiveUrl -DestinationPath $archive
     Expand-Archive -LiteralPath $archive -DestinationPath $extract -Force
 
     $extractEntries = @(Get-ChildItem -LiteralPath $extract -Force)
@@ -189,7 +265,7 @@ try {
     if (-not (Test-ThemeWorkspace -Path $Destination)) {
         throw "Downloaded archive does not contain the expected theme workspace structure."
     }
-    Write-SourceReceipt -Path $Destination
+    Write-SourceReceipt -Path $Destination -Source "https-archive"
     Write-Result -Status "created" -Path $Destination -Method "https-archive-pinned"
 } finally {
     if (Test-Path -LiteralPath $tempRoot) {

@@ -7,6 +7,10 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
+$TrustedRepository = "https://github.com/jiezeng2004-design/XJTU-Codex-Theme.git"
+$TrustedTag = "v0.3.0-rc.1"
+$TrustedRevision = "87a90403453bc2a469423b005cc8d9c761aba307"
+
 function Test-ThemeWorkspace {
     param([Parameter(Mandatory)][string]$Path)
 
@@ -60,13 +64,16 @@ function ConvertTo-RedactedDoctorLine {
 function Test-TrustedWorkspace {
     param([Parameter(Mandatory)][string]$Path)
 
-    $trustedRepository = "https://github.com/jiezeng2004-design/XJTU-Codex-Theme.git"
-    $trustedRevision = "18404b64791bf7e640e91597df17c1fe287399ac"
     $receiptPath = Join-Path $Path ".codex-skin-maker-source.json"
     if (Test-Path -LiteralPath $receiptPath -PathType Leaf) {
         try {
             $receipt = Get-Content -LiteralPath $receiptPath -Raw -Encoding UTF8 | ConvertFrom-Json
-            return [string]::Equals([string]$receipt.revision, $trustedRevision, [System.StringComparison]::OrdinalIgnoreCase)
+            return (
+                [string]::Equals(([string]$receipt.repository).Trim().TrimEnd("/"), $TrustedRepository.TrimEnd("/"), [System.StringComparison]::OrdinalIgnoreCase) -and
+                [string]::Equals(([string]$receipt.tag).Trim(), $TrustedTag, [System.StringComparison]::OrdinalIgnoreCase) -and
+                [string]::Equals(([string]$receipt.revision).Trim(), $TrustedRevision, [System.StringComparison]::OrdinalIgnoreCase) -and
+                @("git", "https-archive") -contains [string]$receipt.source
+            )
         } catch {
             return $false
         }
@@ -81,10 +88,10 @@ function Test-TrustedWorkspace {
     if ($remoteExitCode -ne 0 -or $revisionExitCode -ne 0) { return $false }
     $remote = $remoteOutput | Select-Object -First 1
     $revision = $revisionOutput | Select-Object -First 1
-    $isOfficial = [string]::Equals(([string]$remote).Trim().TrimEnd("/"), $trustedRepository.TrimEnd("/"), [System.StringComparison]::OrdinalIgnoreCase)
+    $isOfficial = [string]::Equals(([string]$remote).Trim().TrimEnd("/"), $TrustedRepository.TrimEnd("/"), [System.StringComparison]::OrdinalIgnoreCase)
     if (-not $isOfficial) { return $false }
     if ($AllowDevelopmentWorkspace) { return $true }
-    return [string]::Equals(([string]$revision).Trim(), $trustedRevision, [System.StringComparison]::OrdinalIgnoreCase)
+    return [string]::Equals(([string]$revision).Trim(), $TrustedRevision, [System.StringComparison]::OrdinalIgnoreCase)
 }
 
 $result = [ordered]@{

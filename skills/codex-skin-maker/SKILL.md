@@ -21,7 +21,7 @@ description: Create or revise a safe custom skin for Microsoft Store Codex Deskt
 
 1. 优先使用当前工作区中同时包含 `engine/`、`template/unbranded/` 和 `xjtu-theme.cmd` 的 XJTU Codex Theme 仓库。
 2. 如果当前工作区不是该仓库，先检查是否已有用户指定的仓库路径。
-3. 如果仍未找到，向用户说明将从官方仓库下载固定到已验证 `v0.2.1` 提交的主题工作区，并在正常命令审批流程下运行：
+3. 如果仍未找到，向用户说明将从官方仓库下载固定到已验证 `v0.3.0-rc.1` 提交的主题工作区，并在正常命令审批流程下运行：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\bootstrap-workspace.ps1
@@ -38,8 +38,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\bootstrap-workspac
 - 运行：
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\skills\codex-skin-maker\scripts\check-environment.ps1 -RepositoryRoot .
+powershell -NoProfile -ExecutionPolicy Bypass -File <当前调用 Skill 的安装目录>\scripts\check-environment.ps1 -RepositoryRoot <固定工作区>
 ```
+
+- 必须使用当前调用 Skill 自带的 `check-environment.ps1` 校验固定工作区，不要切换到下载工作区中的旧副本；安装 Skill 的 release 常量才是当前信任根。
 
 - 只有仓库贡献者在用户明确选择的官方 Git 开发分支中验收时，才可以先核对 `origin` 和干净工作区，再显式追加 `-AllowDevelopmentWorkspace`。普通换肤不得使用该开关。
 

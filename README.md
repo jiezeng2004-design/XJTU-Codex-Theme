@@ -9,7 +9,7 @@
 主题通过短暂的本机 Node Inspector 脉冲注入到正在运行的 Codex，不修改 `WindowsApps`、`app.asar`、Codex 配置、浏览器资料或登录凭据。应用、切换和退出主题都不要求重启 Codex。
 
 > [!WARNING]
-> 这是非官方实验性项目，不隶属于 OpenAI 或西安交通大学。它依赖 Codex Desktop 的 Electron 内部结构，Codex 更新后可能需要适配。当前已验证版本为 `26.715.7063.0`。
+> 这是非官方实验性项目，不隶属于 OpenAI 或西安交通大学。它依赖 Codex Desktop 的 Electron 内部结构，Codex 更新后可能需要适配。维护者当前单机验证的最新 Codex Desktop 版本为 `26.721.3996.0`；精确环境与验收范围见兼容矩阵。
 
 精确兼容状态、Codex 更新后的检查步骤和反馈要求见 [`docs/COMPATIBILITY.md`](docs/COMPATIBILITY.md)。
 
@@ -89,7 +89,7 @@ https://github.com/jiezeng2004-design/XJTU-Codex-Theme/tree/main/skills/codex-sk
 
 完整的普通用户教程见 [`docs/CODEX_SKIN_MAKER.md`](docs/CODEX_SKIN_MAKER.md)。
 
-自动引导默认从官方仓库的已验证 `v0.2.1` 提交准备工作区，不跟随可变分支，也不接受自定义远程源。
+自动引导默认从官方仓库的已验证 `v0.3.0-rc.1` 提交准备工作区，不跟随可变分支，也不接受自定义远程源。
 
 ## 使用自己的图片
 

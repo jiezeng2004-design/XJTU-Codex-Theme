@@ -80,7 +80,7 @@ const bootstrapScript = readText(path.join(projectRoot, "skills", "codex-skin-ma
 assert.match(bootstrapScript, /\$TrustedRevision\s*=\s*"[0-9a-f]{40}"/i, "bootstrap must pin a full Git revision");
 assert.doesNotMatch(bootstrapScript, /refs\/heads\//i, "bootstrap must not download a mutable branch archive");
 assert.doesNotMatch(bootstrapScript, /\bgit\s+pull\b|\bpull\s+--ff-only\b/i, "bootstrap must not update from a mutable branch");
-assert.doesNotMatch(bootstrapScript, /Remove-Item\s+-LiteralPath\s+\$Destination/i, "bootstrap must not delete the destination");
+assert.doesNotMatch(bootstrapScript, /Remove-Item\s+-LiteralPath\s+\$Destination(?![A-Za-z0-9_])/i, "bootstrap must not delete the destination");
 assert.match(bootstrapScript, /Only the official XJTU Codex Theme repository is supported/, "bootstrap must reject custom remote sources");
 
 const environmentScript = readText(path.join(projectRoot, "skills", "codex-skin-maker", "scripts", "check-environment.ps1"));
