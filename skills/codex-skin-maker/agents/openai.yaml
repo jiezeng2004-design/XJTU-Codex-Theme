@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codex 一键换肤"
+  short_description: "用一两张图片安全生成可恢复的 Codex 浅色/深色皮肤"
+  default_prompt: "Use $codex-skin-maker to turn my image into a safe Codex Desktop skin. Generate and validate it first; do not apply it until I approve."
