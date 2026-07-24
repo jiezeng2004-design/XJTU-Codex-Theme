@@ -38,6 +38,8 @@ test("wallpaper CSS uses one fixed body layer without renderer observers", () =>
   assert.match(FIXED_CSS, /html\.xjtu-hot-theme body/);
   assert.match(FIXED_CSS, /main\.main-surface/);
   assert.match(FIXED_CSS, /aside\.app-shell-left-panel/);
+  assert.match(FIXED_CSS, /\[role="menu"\]/);
+  assert.match(FIXED_CSS, /\[role="menuitem"\]/);
   assert.equal((FIXED_CSS.match(/background-attachment: fixed/g) || []).length, 1);
   assert.doesNotMatch(FIXED_CSS, /backdrop-filter:\s*blur/);
   assert.doesNotMatch(FIXED_CSS, /main\.main-surface:has\(/);
