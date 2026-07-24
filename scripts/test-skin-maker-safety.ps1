@@ -18,8 +18,8 @@ $environmentScript = Join-Path $projectRoot "skills\codex-skin-maker\scripts\che
 $bootstrapScript = Join-Path $projectRoot "skills\codex-skin-maker\scripts\bootstrap-workspace.ps1"
 $tempRoot = Join-Path ([IO.Path]::GetTempPath()) ("CodexSkinMakerSafety-{0}" -f [Guid]::NewGuid().ToString("N"))
 $trustedRepository = "https://github.com/jiezeng2004-design/XJTU-Codex-Theme.git"
-$trustedTag = "v0.3.0-rc.2"
-$trustedRevision = "5531e8334e09658d432bf6c0a2840f2f758ffeb1"
+$trustedTag = "v0.3.0-rc.3"
+$trustedRevision = "c36ed3c0b3f0476f91c8e494eec5a1965c294f79"
 $legacyRevision = "18404b64791bf7e640e91597df17c1fe287399ac"
 
 function New-MarkerWorkspace {
