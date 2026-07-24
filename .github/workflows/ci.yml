@@ -27,6 +27,16 @@ jobs:
       - name: Validate theme manifests and assets
         run: node .\scripts\check-theme-assets.mjs
 
+      - name: Validate Skill packages
+        run: node .\scripts\check-skill-pack.mjs
+
+      - name: Parse Skill PowerShell scripts
+        shell: powershell
+        run: |
+          Get-ChildItem .\skills\codex-skin-maker\scripts\*.ps1 | ForEach-Object {
+            [void][scriptblock]::Create((Get-Content -LiteralPath $_.FullName -Raw))
+          }
+
       - name: Run engine unit tests
         run: npm.cmd test --prefix engine
 
