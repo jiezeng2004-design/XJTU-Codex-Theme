@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - chore/build-redskill-package
+  pull_request:
 
 permissions:
   contents: read
