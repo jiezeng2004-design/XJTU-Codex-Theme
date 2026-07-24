@@ -44,14 +44,22 @@ export async function environmentReport() {
     statePath: statePath(),
     scheduledTask: taskExists(),
     themes: {
-      dark: summarizeTheme(loadTheme("dark")),
-      light: summarizeTheme(loadTheme("light")),
+      dark: safeThemeSummary("dark"),
+      light: safeThemeSummary("light"),
     },
   };
 }
 
 function summarizeTheme(theme) {
   return { id: theme.id, name: theme.name, mode: theme.mode, imagePath: theme.imagePath, layout: theme.layout };
+}
+
+function safeThemeSummary(mode) {
+  try {
+    return summarizeTheme(loadTheme(mode));
+  } catch {
+    return { available: false, error: `${mode} theme manifest could not be loaded.` };
+  }
 }
 
 function assertBundle(bundle) {

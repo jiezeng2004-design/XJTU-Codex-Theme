@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param(
-    [string]$RepositoryRoot
+    [string]$RepositoryRoot,
+    [switch]$AllowDevelopmentWorkspace
 )
 
 Set-StrictMode -Version Latest
@@ -21,7 +22,11 @@ function Find-ThemeWorkspace {
 
     foreach ($start in $Starts) {
         if ([string]::IsNullOrWhiteSpace($start)) { continue }
-        $candidate = [System.IO.Path]::GetFullPath($start)
+        try {
+            $candidate = [System.IO.Path]::GetFullPath($start)
+        } catch {
+            continue
+        }
         if (Test-Path -LiteralPath $candidate -PathType Leaf) {
             $candidate = Split-Path -Parent $candidate
         }
@@ -39,11 +44,57 @@ function Find-ThemeWorkspace {
     return $null
 }
 
+function ConvertTo-SafeDisplayPath {
+    param([Parameter(Mandatory)][string]$Path)
+
+    return "<workspace>\$(Split-Path -Leaf $Path)"
+}
+
+function ConvertTo-RedactedDoctorLine {
+    param([Parameter(Mandatory)][AllowEmptyString()][string]$Line)
+
+    $redacted = $Line -replace '(?i)[a-z]:\\[^\s,;\]\}\)"'']+', '<path>'
+    return $redacted -replace '(?i)\\\\[^\s,;\]\}\)"'']+', '<path>'
+}
+
+function Test-TrustedWorkspace {
+    param([Parameter(Mandatory)][string]$Path)
+
+    $trustedRepository = "https://github.com/jiezeng2004-design/XJTU-Codex-Theme.git"
+    $trustedRevision = "18404b64791bf7e640e91597df17c1fe287399ac"
+    $receiptPath = Join-Path $Path ".codex-skin-maker-source.json"
+    if (Test-Path -LiteralPath $receiptPath -PathType Leaf) {
+        try {
+            $receipt = Get-Content -LiteralPath $receiptPath -Raw -Encoding UTF8 | ConvertFrom-Json
+            return [string]::Equals([string]$receipt.revision, $trustedRevision, [System.StringComparison]::OrdinalIgnoreCase)
+        } catch {
+            return $false
+        }
+    }
+
+    $git = Get-Command git.exe -ErrorAction SilentlyContinue
+    if (-not $git -or -not (Test-Path -LiteralPath (Join-Path $Path ".git"))) { return $false }
+    $remoteOutput = @(& $git.Source -C $Path remote get-url origin 2>$null)
+    $remoteExitCode = $LASTEXITCODE
+    $revisionOutput = @(& $git.Source -C $Path rev-parse HEAD 2>$null)
+    $revisionExitCode = $LASTEXITCODE
+    if ($remoteExitCode -ne 0 -or $revisionExitCode -ne 0) { return $false }
+    $remote = $remoteOutput | Select-Object -First 1
+    $revision = $revisionOutput | Select-Object -First 1
+    $isOfficial = [string]::Equals(([string]$remote).Trim().TrimEnd("/"), $trustedRepository.TrimEnd("/"), [System.StringComparison]::OrdinalIgnoreCase)
+    if (-not $isOfficial) { return $false }
+    if ($AllowDevelopmentWorkspace) { return $true }
+    return [string]::Equals(([string]$revision).Trim(), $trustedRevision, [System.StringComparison]::OrdinalIgnoreCase)
+}
+
 $result = [ordered]@{
     status = "blocked"
     windows = ($env:OS -eq "Windows_NT")
+    windowsVersion = [Environment]::OSVersion.Version.ToString()
+    windowsSupported = $false
     architecture = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString()
     repositoryRoot = $null
+    workspaceTrusted = $false
     node = [ordered]@{
         found = $false
         version = $null
@@ -64,6 +115,11 @@ $result = [ordered]@{
 if (-not $result.windows) {
     $result.blockers += "Windows 10/11 x64 is required."
 }
+if ($result.windows -and [Environment]::OSVersion.Version.Major -lt 10) {
+    $result.blockers += "Windows 10/11 is required."
+} else {
+    $result.windowsSupported = $result.windows
+}
 if ($result.architecture -ne "X64") {
     $result.blockers += "x64 Windows is required; detected $($result.architecture)."
 }
@@ -75,7 +131,11 @@ $starts += $PSScriptRoot
 $workspace = Find-ThemeWorkspace -Starts $starts
 
 if ($workspace) {
-    $result.repositoryRoot = (Resolve-Path -LiteralPath $workspace).Path
+    $result.repositoryRoot = ConvertTo-SafeDisplayPath -Path (Resolve-Path -LiteralPath $workspace).Path
+    $result.workspaceTrusted = Test-TrustedWorkspace -Path $workspace
+    if (-not $result.workspaceTrusted) {
+        $result.blockers += "Theme workspace source could not be verified."
+    }
 } else {
     $result.blockers += "XJTU Codex Theme workspace was not found."
 }
@@ -105,13 +165,22 @@ if ($git) {
     $result.git.version = (& $git.Source --version 2>$null | Select-Object -First 1)
 }
 
-if ($workspace -and $result.windows) {
+if ($workspace -and $result.workspaceTrusted -and $result.windows) {
     $launcher = Join-Path $workspace "xjtu-theme.cmd"
-    $doctorOutput = @(& cmd.exe /d /c "`"$launcher`" doctor" 2>&1 | ForEach-Object { $_.ToString() })
-    $doctorExitCode = $LASTEXITCODE
+    $previousErrorActionPreference = $ErrorActionPreference
+    try {
+        $ErrorActionPreference = "Continue"
+        $doctorOutput = @(& cmd.exe /d /c "`"$launcher`" doctor" 2>&1 | ForEach-Object { $_.ToString() })
+        $doctorExitCode = $LASTEXITCODE
+    } catch {
+        $doctorOutput = @($_.Exception.Message)
+        $doctorExitCode = 1
+    } finally {
+        $ErrorActionPreference = $previousErrorActionPreference
+    }
     $result.doctor.ran = $true
     $result.doctor.exitCode = $doctorExitCode
-    $result.doctor.summary = @($doctorOutput | Select-Object -Last 8)
+    $result.doctor.summary = @($doctorOutput | Select-Object -Last 8 | ForEach-Object { ConvertTo-RedactedDoctorLine -Line $_ })
     if ($doctorExitCode -ne 0) {
         $result.blockers += "Theme doctor did not pass."
     }
