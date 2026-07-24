@@ -67,3 +67,4 @@ exit /b 0
 }
 
 Write-Host "PASS Codex Skin Maker safety gates" -ForegroundColor Green
+exit 0
