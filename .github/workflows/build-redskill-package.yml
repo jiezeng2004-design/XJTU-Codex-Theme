@@ -1,0 +1,41 @@
+name: Build REDskill package
+
+on:
+  push:
+    branches:
+      - chore/build-redskill-package
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build root-level Skill ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f skills/codex-skin-maker/SKILL.md
+          mkdir -p out
+          (
+            cd skills/codex-skin-maker
+            zip -r ../../out/codex-skin-maker-redskill.zip . \
+              -x '*.DS_Store' '__MACOSX/*' '*.pyc' '*/__pycache__/*'
+          )
+          unzip -l out/codex-skin-maker-redskill.zip
+          first_entry="$(unzip -Z1 out/codex-skin-maker-redskill.zip | head -n 1)"
+          test "$first_entry" = "SKILL.md"
+          unzip -Z1 out/codex-skin-maker-redskill.zip | grep -Fx 'SKILL.md'
+          sha256sum out/codex-skin-maker-redskill.zip > out/SHA256SUMS.txt
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: codex-skin-maker-redskill
+          path: out/
+          if-no-files-found: error
+          retention-days: 7
