@@ -50,7 +50,7 @@ https://github.com/jiezeng2004-design/XJTU-Codex-Theme/tree/main/skills/codex-sk
 先生成和测试，不要直接应用。
 ```
 
-如果 Skill 已安装但当前工作区没有主题引擎，它会在命令审批后运行 `bootstrap-workspace.ps1`，从官方仓库下载固定到已验证 `v0.3.0-rc.1` 提交的独立工作区。脚本不跟随可变分支，不接受自定义远程源，也不会覆盖非空目录。
+如果 Skill 已安装但当前工作区没有主题引擎，它会在命令审批后运行 `bootstrap-workspace.ps1`，从官方仓库下载固定到已验证 `v0.3.0-rc.2` 提交的独立工作区。脚本不跟随可变分支，不接受自定义远程源，也不会覆盖非空目录。
 
 直接在官方仓库的开发分支中验收时，贡献者需要先确认 `origin` 和工作区状态，再显式给环境检查传入 `-AllowDevelopmentWorkspace`。普通换肤不应使用这个开发开关。
 

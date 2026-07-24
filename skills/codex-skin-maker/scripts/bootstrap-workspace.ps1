@@ -9,8 +9,8 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 $TrustedRepository = "https://github.com/jiezeng2004-design/XJTU-Codex-Theme.git"
-$TrustedTag = "v0.3.0-rc.1"
-$TrustedRevision = "87a90403453bc2a469423b005cc8d9c761aba307"
+$TrustedTag = "v0.3.0-rc.2"
+$TrustedRevision = "5531e8334e09658d432bf6c0a2840f2f758ffeb1"
 $LegacyRevision = "18404b64791bf7e640e91597df17c1fe287399ac"
 
 function Test-ThemeWorkspace {

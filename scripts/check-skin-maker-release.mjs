@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const officialRepository = "https://github.com/jiezeng2004-design/XJTU-Codex-Theme.git";
-const expectedTag = "v0.3.0-rc.1";
+const expectedTag = "v0.3.0-rc.2";
 const requiredPinnedFiles = [
   "skills/codex-skin-maker/SKILL.md",
   "skills/codex-skin-maker/scripts/check-environment.ps1",

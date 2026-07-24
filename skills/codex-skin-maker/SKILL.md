@@ -21,7 +21,7 @@ description: Create or revise a safe custom skin for Microsoft Store Codex Deskt
 
 1. 优先使用当前工作区中同时包含 `engine/`、`template/unbranded/` 和 `xjtu-theme.cmd` 的 XJTU Codex Theme 仓库。
 2. 如果当前工作区不是该仓库，先检查是否已有用户指定的仓库路径。
-3. 如果仍未找到，向用户说明将从官方仓库下载固定到已验证 `v0.3.0-rc.1` 提交的主题工作区，并在正常命令审批流程下运行：
+3. 如果仍未找到，向用户说明将从官方仓库下载固定到已验证 `v0.3.0-rc.2` 提交的主题工作区，并在正常命令审批流程下运行：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\bootstrap-workspace.ps1

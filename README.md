@@ -89,7 +89,7 @@ https://github.com/jiezeng2004-design/XJTU-Codex-Theme/tree/main/skills/codex-sk
 
 完整的普通用户教程见 [`docs/CODEX_SKIN_MAKER.md`](docs/CODEX_SKIN_MAKER.md)。
 
-自动引导默认从官方仓库的已验证 `v0.3.0-rc.1` 提交准备工作区，不跟随可变分支，也不接受自定义远程源。
+自动引导默认从官方仓库的已验证 `v0.3.0-rc.2` 提交准备工作区，不跟随可变分支，也不接受自定义远程源。
 
 ## 使用自己的图片
 
