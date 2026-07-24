@@ -102,6 +102,16 @@ html.${ROOT_CLASS} .composer-surface-chrome {
   box-shadow: 0 16px 38px color-mix(in srgb, var(--xjtu-bg) 34%, transparent) !important;
 }
 
+html.${ROOT_CLASS} :is([role="menu"], [data-radix-menu-content]) {
+  background: var(--xjtu-panel) !important;
+  border: 1px solid var(--xjtu-line) !important;
+  color: var(--xjtu-text) !important;
+}
+
+html.${ROOT_CLASS} :is([role="menu"], [data-radix-menu-content]) :is([role="menuitem"], [data-radix-menu-item]) {
+  color: var(--xjtu-text) !important;
+}
+
 html.${ROOT_CLASS} :is(pre, table, blockquote) {
   background: color-mix(in srgb, var(--xjtu-panel) 96%, var(--xjtu-bg)) !important;
   border-color: var(--xjtu-line) !important;

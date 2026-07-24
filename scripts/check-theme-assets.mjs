@@ -45,7 +45,10 @@ for (const variant of variants) {
   const engineManifestPath = path.join(projectRoot, "engine", "themes", `${variant}.json`);
   const engine = readJson(engineManifestPath);
   assert.equal(engine.schemaVersion, 1, `${variant} engine schemaVersion`);
-  assert.equal(engine.id, source.id, `${variant} manifest ids`);
+  assert.match(engine.id || "", /^[a-z0-9][a-z0-9-]{0,63}$/, `${variant} engine id`);
+  if (engine.id.startsWith("xjtu-academic-")) {
+    assert.equal(engine.id, source.id, `${variant} XJTU manifest id`);
+  }
   assert.equal(engine.variant, variant, `${variant} engine variant`);
   resolveProjectFile(path.dirname(engineManifestPath), engine.image, `${variant} engine image`);
 }

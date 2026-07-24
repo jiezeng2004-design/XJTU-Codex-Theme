@@ -27,6 +27,25 @@ jobs:
       - name: Validate theme manifests and assets
         run: node .\scripts\check-theme-assets.mjs
 
+      - name: Validate Skill packages
+        run: node .\scripts\check-skill-pack.mjs
+
+      - name: Validate immutable Skin Maker workspace release
+        run: node .\scripts\check-skin-maker-release.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Parse Skill PowerShell scripts
+        shell: powershell
+        run: |
+          Get-ChildItem .\skills\codex-skin-maker\scripts\*.ps1 | ForEach-Object {
+            [void][scriptblock]::Create((Get-Content -LiteralPath $_.FullName -Raw))
+          }
+
+      - name: Test Codex Skin Maker safety gates
+        shell: powershell
+        run: .\scripts\test-skin-maker-safety.ps1
+
       - name: Run engine unit tests
         run: npm.cmd test --prefix engine
 

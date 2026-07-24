@@ -1,4 +1,4 @@
 interface:
   display_name: "Codex Theme Author"
-  short_description: "Build safe no-restart Codex themes from user images"
-  default_prompt: "Use $codex-theme-author to create a safe custom Codex theme from my image."
+  short_description: "Author advanced Codex theme manifests and engine integration"
+  default_prompt: "Use $codex-theme-author to revise an advanced Codex theme manifest and validate its engine integration."

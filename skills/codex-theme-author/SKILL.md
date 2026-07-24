@@ -1,6 +1,6 @@
 ---
 name: codex-theme-author
-description: Create or revise safe no-restart Codex Desktop themes from one or two user-provided images in the XJTU Codex Theme repository. Use when Codex needs to build a custom light/dark skin, adapt the unbranded template, tune colors and wallpaper layout, validate theme manifests, or prepare a guarded preview and rollback workflow.
+description: Author or revise advanced Codex Desktop theme manifests, template structure, renderer layout fields, and engine integration in the XJTU Codex Theme repository. Use for explicit manifest/schema work, reusable theme-source maintenance, or low-level preview and rollback engineering; prefer codex-skin-maker for ordinary one- or two-image skin requests.
 ---
 
 # Codex Theme Author
