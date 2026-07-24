@@ -1,9 +1,10 @@
 # XJTU Codex Theme
 
-一个面向 Microsoft Store 版 Codex Desktop 的 Windows 本地主题项目。它包含两部分：
+一个面向 Microsoft Store 版 Codex Desktop 的 Windows 本地主题项目。它包含三部分：
 
 1. **XJTU Academic Theme**：已经配好的西安交通大学校园浅色/暗色主题，可直接试用。
-2. **Unbranded Template**：无品牌主题模板，用户提供图片后，可以让 Codex 生成自己的皮肤。
+2. **Codex Skin Maker**：面向普通用户的一句话换肤 Skill，提供图片后自动生成、检查、预览和恢复。
+3. **Unbranded Template**：无品牌主题模板，供开发者和高级用户制作自己的主题。
 
 主题通过短暂的本机 Node Inspector 脉冲注入到正在运行的 Codex，不修改 `WindowsApps`、`app.asar`、Codex 配置、浏览器资料或登录凭据。应用、切换和退出主题都不要求重启 Codex。
 
@@ -61,14 +62,42 @@ powershell -ExecutionPolicy Bypass -File .\scripts\install-desktop-shortcuts.ps1
 
 `preview` 仅作用于当前 Codex 进程。`disable` 会移除注入的样式与事件钩子，并清理本地主题状态。默认不会创建计划任务。
 
+## 一句话换肤 Skill
+
+[`codex-skin-maker`](skills/codex-skin-maker/SKILL.md) 面向不熟悉 Git、Node.js、主题 JSON 或 Inspector 的普通用户。用户提供一张或两张自己拥有使用权的图片后，Skill 会：
+
+1. 检查 Windows、Node.js、Microsoft Store Codex 和版本兼容性；
+2. 从无品牌模板生成浅色和深色皮肤；
+3. 运行主题校验、资源检查、单元测试、安全测试和离线 Dry Run；
+4. 展示简明结果并等待用户明确确认；
+5. 只预览一个模式，随后执行 `verify`；
+6. 失败时立即执行 `disable` 恢复原版。
+
+可以让 Codex 安装 GitHub 中的 Skill：
+
+```text
+使用 $skill-installer 安装这个 Skill：
+https://github.com/jiezeng2004-design/XJTU-Codex-Theme/tree/main/skills/codex-skin-maker
+```
+
+安装后提供图片并说：
+
+```text
+使用 $codex-skin-maker，把这张图片做成我的 Codex 皮肤。
+浅色和深色都要，先生成和检查，不要直接应用。
+```
+
+完整的普通用户教程见 [`docs/CODEX_SKIN_MAKER.md`](docs/CODEX_SKIN_MAKER.md)。
+
 ## 使用自己的图片
 
-无品牌模板位于 [`template/unbranded/`](template/unbranded/)。完整流程见：
+无品牌模板位于 [`template/unbranded/`](template/unbranded/)。高级主题制作流程见：
 
 - [`docs/CREATE_CUSTOM_THEME_WITH_CODEX.md`](docs/CREATE_CUSTOM_THEME_WITH_CODEX.md)
-- 可选 Skill：[`skills/codex-theme-author/SKILL.md`](skills/codex-theme-author/SKILL.md)
+- 普通用户 Skill：[`skills/codex-skin-maker/SKILL.md`](skills/codex-skin-maker/SKILL.md)
+- 高级主题作者 Skill：[`skills/codex-theme-author/SKILL.md`](skills/codex-theme-author/SKILL.md)
 
-最简单的方式是把图片放进仓库，然后对 Codex 说：
+需要精细调整 manifest、布局和主题源时，可以对 Codex 说：
 
 ```text
 使用这个仓库的 $codex-theme-author，根据我提供的图片制作浅色和暗色 Codex 主题。
@@ -86,17 +115,19 @@ powershell -ExecutionPolicy Bypass -File .\scripts\install-desktop-shortcuts.ps1
 - `verify` 检查主题样式、背景、主区域与指针事件。
 - `disable` 可以在残留 Inspector 确认属于同一 Codex PID 后接管并恢复。
 - 不读取或复制 Cookie、登录态、API Key 或 Codex 对话内容。
+- `codex-skin-maker` 不会把最初的制作请求视为真实注入授权；预览前必须再次明确确认。
 
 ## 项目结构
 
 ```text
-assets/backgrounds/        XJTU 原始背景素材
-themes/xjtu-academic-*/    XJTU CodeDrobe 兼容主题源
-engine/                    无重启主题引擎
-template/unbranded/        无品牌派生模板
-skills/codex-theme-author/ 可选 Codex 主题作者 Skill
-docs/                      自定义主题教程
-scripts/                   安装、验证与恢复脚本
+assets/backgrounds/         XJTU 原始背景素材
+themes/xjtu-academic-*/     XJTU CodeDrobe 兼容主题源
+engine/                     无重启主题引擎
+template/unbranded/         无品牌派生模板
+skills/codex-skin-maker/    普通用户一键换肤 Skill
+skills/codex-theme-author/  高级 Codex 主题作者 Skill
+docs/                       自定义主题与兼容性教程
+scripts/                    安装、验证与恢复脚本
 ```
 
 `dist/` 和旧 CodeDrobe 脚本作为历史兼容与恢复资料保留。新的默认入口是 `xjtu-theme.cmd`。
