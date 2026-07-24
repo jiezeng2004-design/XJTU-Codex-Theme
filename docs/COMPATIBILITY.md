@@ -6,7 +6,7 @@ XJTU Codex Theme depends on Microsoft Store Codex Desktop's Electron process and
 
 | XJTU Theme | Windows | Codex Desktop | Verification | Status |
 | --- | --- | --- | --- | --- |
-| v0.3.0-rc.3 | Windows 11 x64, build 26200.8875 | 26.721.3996.0 | Engine dark/light preview, manual click/input/scroll checks, readable light/dark menus, verify, disable and invalid-manifest recovery; new-session Skill E2E pending | Maintainer verified on one machine on 2026-07-24 |
+| v0.3.0-rc.3 | Windows 11 x64, build 26200.8875 | 26.721.3996.0 | New-session Skill bootstrap, light/dark generation, offline validation, light preview, verify, disable and invalid-manifest recovery passed; dark UI interaction was checked before rc.3, while the rc.3 light-menu visual check remains pending | Partially verified by maintainer on one machine on 2026-07-24 |
 | v0.2.1 | Windows x64, build 26200 (25H2) | 26.715.7063.0 | Live dark preview, renderer health verification, disable/recovery, Node tests, PowerShell safety tests, offline DryRun | Verified by maintainer on 2026-07-21 |
 | v0.2.1 | Other supported Windows 10/11 x64 builds | 26.715.7063.0 | Not yet independently tested | Needs tester |
 | v0.2.1 | Windows 10/11 x64 | Newer than 26.715.7063.0 | Not yet verified | Report results after updating |
