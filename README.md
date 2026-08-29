@@ -1,17 +1,22 @@
 # XJTU Codex Theme
 
-一个面向 Microsoft Store 版 Codex Desktop 的 Windows 本地主题项目。它包含三部分：
+> **不用重启 Codex，就能给 Codex Desktop 换皮肤。**
+>
+> 现成 XJTU 校园主题 + 一句话生成自己的浅色/暗色主题 + 可验证、可恢复的本地热切换。
 
-1. **XJTU Academic Theme**：已经配好的西安交通大学校园浅色/暗色主题，可直接试用。
-2. **Codex Skin Maker**：面向普通用户的一句话换肤 Skill，提供图片后自动生成、检查、预览和恢复。
-3. **Unbranded Template**：无品牌主题模板，供开发者和高级用户制作自己的主题。
+XJTU Codex Theme 是一个面向 **Microsoft Store 版 Codex Desktop** 的 Windows 本地主题项目。
 
-主题通过短暂的本机 Node Inspector 脉冲注入到正在运行的 Codex，不修改 `WindowsApps`、`app.asar`、Codex 配置、浏览器资料或登录凭据。应用、切换和退出主题都不要求重启 Codex。
+它解决的不是“怎么改 Electron 文件”，而是一个更直接的问题：
 
-> [!WARNING]
-> 这是非官方实验性项目，不隶属于 OpenAI 或西安交通大学。它依赖 Codex Desktop 的 Electron 内部结构，Codex 更新后可能需要适配。维护者当前单机验证的最新 Codex Desktop 版本为 `26.721.3996.0`；精确环境与验收范围见兼容矩阵。
+> **我想让 Codex 看起来像我自己的工具，但又不想每次更新、切换、恢复都去手改 `app.asar`。**
 
-精确兼容状态、Codex 更新后的检查步骤和反馈要求见 [`docs/COMPATIBILITY.md`](docs/COMPATIBILITY.md)。
+项目包含三部分：
+
+1. **XJTU Academic Theme** — 已经做好的西安交通大学浅色 / 暗色主题；
+2. **Codex Skin Maker** — 给一张或两张图片，让 Codex 帮你生成、检查和预览主题；
+3. **Unbranded Template** — 给高级用户和开发者制作自己的主题。
+
+主题通过短暂的本机 Node Inspector 脉冲注入到正在运行的 Codex，不修改 `WindowsApps`、`app.asar`、Codex 配置、浏览器资料或登录凭据。
 
 ## 效果预览
 
@@ -19,34 +24,34 @@
 | --- | --- |
 | ![XJTU Codex dark theme](docs/media/xjtu-codex-dark.png) | ![XJTU Codex light theme](docs/media/xjtu-codex-light.png) |
 
-### 无重启切换演示
+### 无重启切换
 
 ![Switch between XJTU Codex light and dark themes without restarting](docs/media/xjtu-codex-theme-demo.gif)
 
-[观看无音轨高清 MP4 演示](https://github.com/jiezeng2004-design/XJTU-Codex-Theme/releases/latest/download/xjtu-codex-theme-demo.mp4)
+[观看高清 MP4 演示](https://github.com/jiezeng2004-design/XJTU-Codex-Theme/releases/latest/download/xjtu-codex-theme-demo.mp4)
 
-## XJTU 成品主题
+## 最快开始
 
-环境要求：
+环境：
 
-- Windows 10/11 x64
+- Windows 10 / 11 x64
 - Microsoft Store 版 Codex Desktop
-- Node.js 22 或更新版本
+- Node.js 22+
 
-先运行只读检查：
+先做只读检查：
 
 ```cmd
 xjtu-theme.cmd doctor
 ```
 
-无重启加载主题：
+预览暗色或浅色主题：
 
 ```cmd
 xjtu-theme.cmd preview dark
 xjtu-theme.cmd preview light
 ```
 
-切换、验证和退出：
+切换、验证和恢复：
 
 ```cmd
 xjtu-theme.cmd switch
@@ -54,52 +59,77 @@ xjtu-theme.cmd verify
 xjtu-theme.cmd disable
 ```
 
-创建桌面快捷方式：
+`preview` 只作用于当前 Codex 进程。`disable` 会移除注入的样式与事件钩子，并清理本地主题状态。
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\install-desktop-shortcuts.ps1
-```
+## 一句话做自己的 Codex 皮肤
 
-`preview` 仅作用于当前 Codex 进程。`disable` 会移除注入的样式与事件钩子，并清理本地主题状态。默认不会创建计划任务。
+如果你不想研究主题 JSON、Inspector 或布局结构，可以直接使用 [`codex-skin-maker`](skills/codex-skin-maker/SKILL.md)。
 
-## 一句话换肤 Skill
-
-[`codex-skin-maker`](skills/codex-skin-maker/SKILL.md) 面向不熟悉 Git、Node.js、主题 JSON 或 Inspector 的普通用户。用户提供一张或两张自己拥有使用权的图片后，Skill 会：
-
-1. 检查 Windows、Node.js、Microsoft Store Codex、固定来源工作区和版本兼容性；
-2. 从无品牌模板生成浅色和深色皮肤；
-3. 运行主题校验、资源检查、单元测试、安全测试和离线 Dry Run；
-4. 展示简明结果并等待用户明确确认；
-5. 只预览一个模式，随后执行 `verify`；
-6. 失败时立即执行 `disable` 恢复原版。
-
-可以让 Codex 安装 GitHub 中的 Skill：
+先安装 Skill：
 
 ```text
 使用 $skill-installer 安装这个 Skill：
 https://github.com/jiezeng2004-design/XJTU-Codex-Theme/tree/main/skills/codex-skin-maker
 ```
 
-安装后提供图片并说：
+然后把你有权使用的图片交给 Codex：
 
 ```text
 使用 $codex-skin-maker，把这张图片做成我的 Codex 皮肤。
 浅色和深色都要，先生成和检查，不要直接应用。
 ```
 
-完整的普通用户教程见 [`docs/CODEX_SKIN_MAKER.md`](docs/CODEX_SKIN_MAKER.md)。
+Skill 会：
+
+1. 检查 Windows、Node.js、Codex Desktop 和兼容状态；
+2. 从无品牌模板生成浅色 / 暗色主题；
+3. 跑资源检查、单元测试、安全测试和离线 Dry Run；
+4. 展示结果并等待你明确确认；
+5. 只预览你确认的模式；
+6. 失败时执行 `disable` 恢复原版。
+
+完整教程见 [`docs/CODEX_SKIN_MAKER.md`](docs/CODEX_SKIN_MAKER.md)。
 
 自动引导默认从官方仓库的已验证 `v0.3.0-rc.3` 提交准备工作区，不跟随可变分支，也不接受自定义远程源。
 
+## 为什么不用直接改 `app.asar`
+
+这个项目的核心思路是：**尽量不碰 Codex 安装文件本身**。
+
+```text
+Codex 正在运行
+   ↓
+短暂打开本机 Inspector
+   ↓
+确认目标 PID
+   ↓
+注入主题
+   ↓
+立即关闭 Inspector
+```
+
+这样做的目标是让：
+
+- 主题可以热切换；
+- 退出主题不需要重装 Codex；
+- Codex 更新后的兼容检查更清晰；
+- 故障时有明确的恢复入口。
+
 ## 使用自己的图片
 
-无品牌模板位于 [`template/unbranded/`](template/unbranded/)。高级主题制作流程见：
+无品牌模板：
+
+```text
+template/unbranded/
+```
+
+高级教程：
 
 - [`docs/CREATE_CUSTOM_THEME_WITH_CODEX.md`](docs/CREATE_CUSTOM_THEME_WITH_CODEX.md)
-- 普通用户 Skill：[`skills/codex-skin-maker/SKILL.md`](skills/codex-skin-maker/SKILL.md)
-- 高级主题作者 Skill：[`skills/codex-theme-author/SKILL.md`](skills/codex-theme-author/SKILL.md)
+- [`skills/codex-skin-maker/SKILL.md`](skills/codex-skin-maker/SKILL.md)
+- [`skills/codex-theme-author/SKILL.md`](skills/codex-theme-author/SKILL.md)
 
-需要精细调整 manifest、布局和主题源时，可以对 Codex 说：
+高级用户也可以对 Codex 说：
 
 ```text
 使用这个仓库的 $codex-theme-author，根据我提供的图片制作浅色和暗色 Codex 主题。
@@ -107,45 +137,62 @@ https://github.com/jiezeng2004-design/XJTU-Codex-Theme/tree/main/skills/codex-sk
 先只生成主题并运行测试和 DryRun，不要实际应用，等我确认后再 preview。
 ```
 
-推荐图片：2560×1440、16:9、JPEG/PNG/WebP。为了给侧栏和输入区留出可读空间，建议主体位于画面右侧，左侧保持低信息区域。如果只提供一张图，Codex 可以复用图像并为浅色/暗色配置不同颜色与遮罩；也可以分别提供两张图片。
+推荐图片：2560×1440、16:9、JPEG / PNG / WebP。为了侧栏和输入区可读，建议主体偏右、左侧保留低信息区域。
 
 ## 安全边界
 
-- Inspector 只绑定 `127.0.0.1:9229`，每次注入后立即关闭。
-- 连接后必须验证目标 PID 是当前 Store Codex 主进程。
-- 已存在的旧 CodeDrobe 事务或端口 9335 会阻止热引擎运行。
-- `verify` 检查主题样式、背景、主区域与指针事件。
-- `disable` 可以在残留 Inspector 确认属于同一 Codex PID 后接管并恢复。
-- 不读取或复制 Cookie、登录态、API Key 或 Codex 对话内容。
-- `codex-skin-maker` 不会把最初的制作请求视为真实注入授权；预览前必须再次明确确认。
+- Inspector 只绑定 `127.0.0.1:9229`；
+- 每次注入后立即关闭；
+- 连接后验证目标 PID 是当前 Store Codex 主进程；
+- 已存在的冲突 Inspector / 旧事务会阻止热引擎继续；
+- `verify` 检查主题样式、背景、主区域和指针事件；
+- `disable` 提供恢复路径；
+- 不读取或复制 Cookie、登录态、API Key 或 Codex 对话内容；
+- `codex-skin-maker` 不把“帮我做主题”本身视为实际注入授权，预览前需要再次确认。
+
+## 兼容性
+
+这是一个依赖 Codex Desktop Electron 内部结构的**非官方实验性项目**。Codex 更新后可能需要适配。
+
+精确兼容状态和更新后的检查步骤见：
+
+[`docs/COMPATIBILITY.md`](docs/COMPATIBILITY.md)
+
+Skin Maker 工作区固定在已验证的 `v0.3.0-rc.3` 提交。Codex 更新后请先对照兼容性文档，再决定是否 preview。
+
+建议在每次 Codex 大版本更新后先运行：
+
+```cmd
+xjtu-theme.cmd doctor
+```
+
+再决定是否预览主题。
 
 ## 项目结构
 
 ```text
-assets/backgrounds/         XJTU 原始背景素材
-themes/xjtu-academic-*/     XJTU CodeDrobe 兼容主题源
+assets/backgrounds/         XJTU 背景素材
+themes/xjtu-academic-*/     XJTU 主题源
 engine/                     无重启主题引擎
-template/unbranded/         无品牌派生模板
-skills/codex-skin-maker/    普通用户一键换肤 Skill
-skills/codex-theme-author/  高级 Codex 主题作者 Skill
-docs/                       自定义主题与兼容性教程
+template/unbranded/         无品牌模板
+skills/codex-skin-maker/    普通用户换肤 Skill
+skills/codex-theme-author/  高级主题作者 Skill
+docs/                       自定义主题与兼容性文档
 scripts/                    安装、验证与恢复脚本
 ```
 
-`dist/` 和旧 CodeDrobe 脚本作为历史兼容与恢复资料保留。新的默认入口是 `xjtu-theme.cmd`。
-
 ## 许可
 
-本项目采用 [`XJTU Codex Theme Non-Commercial Source License 1.0`](LICENSE)：
+本项目采用 [`XJTU Codex Theme Non-Commercial Source License 1.0`](LICENSE)。
 
-- 个人、学习、研究和其他非商业用途可以查看、使用、修改和再分发。
-- 商业使用、收费服务、商业产品集成或以商业利益为目的的使用，需要事先联系项目作者并取得单独商业授权。
-- 该许可不是 OSI 批准的开源许可证，因此本项目应准确描述为 **source-available / 源代码公开项目**。
+- 个人、学习、研究及其他非商业用途可以查看、使用、修改和再分发；
+- 商业使用、收费服务、商业产品集成或以商业利益为目的的使用，需要单独商业授权；
+- 该许可证不是 OSI 批准的开源许可证，因此本项目应准确描述为 **source-available / 源代码公开项目**。
 
-商业授权方式见 [`COMMERCIAL_LICENSE.md`](COMMERCIAL_LICENSE.md)。第三方许可见 [`engine/THIRD_PARTY_NOTICES.md`](engine/THIRD_PARTY_NOTICES.md)。
+商业授权说明见 [`COMMERCIAL_LICENSE.md`](COMMERCIAL_LICENSE.md)。第三方许可见 [`engine/THIRD_PARTY_NOTICES.md`](engine/THIRD_PARTY_NOTICES.md)。
 
-作者：`yistart`。商业授权联系邮箱：`jiezeng2004@gmail.com`。
+## 声明
 
-## 致谢与声明
+这是非官方社区项目，不隶属于或代表 OpenAI / 西安交通大学。XJTU 风格素材与主题均为非官方创作。
 
-Inspector 脉冲架构参考了 `okkskin` 0.2.0 的 MIT 授权实现，相关版权和许可全文已保留。本项目及其中的 XJTU 风格素材为非官方创作，不代表 OpenAI 或西安交通大学的认可、授权或官方发布。
+Inspector 脉冲架构参考了 `okkskin` 0.2.0 的 MIT 授权实现，相关版权与许可已保留。
