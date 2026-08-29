@@ -90,6 +90,8 @@ Skill 会：
 
 完整教程见 [`docs/CODEX_SKIN_MAKER.md`](docs/CODEX_SKIN_MAKER.md)。
 
+自动引导默认从官方仓库的已验证 `v0.3.0-rc.3` 提交准备工作区，不跟随可变分支，也不接受自定义远程源。
+
 ## 为什么不用直接改 `app.asar`
 
 这个项目的核心思路是：**尽量不碰 Codex 安装文件本身**。
@@ -155,6 +157,8 @@ template/unbranded/
 精确兼容状态和更新后的检查步骤见：
 
 [`docs/COMPATIBILITY.md`](docs/COMPATIBILITY.md)
+
+Skin Maker 工作区固定在已验证的 `v0.3.0-rc.3` 提交。Codex 更新后请先对照兼容性文档，再决定是否 preview。
 
 建议在每次 Codex 大版本更新后先运行：
 
